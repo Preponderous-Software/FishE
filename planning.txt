@@ -32,4 +32,3 @@ GOALS
 - Create a bank
 - Have the shopkeeper sell bait that lets you have a chance at double the fish
 - Create artwork
-- Create a system where sleeping saves your fish, the day and your money and loads the game from that point if you want. Similiar to the cave project I made awhile ago.
