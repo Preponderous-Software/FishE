@@ -3,6 +3,8 @@ import random
 
 class Game(object):
 
+	rawFile = ("savefile.txt")
+
 	def __init__(self):
 		self.currentLocation = "home"
 		self.times = {0: "12:00 AM",
@@ -41,6 +43,35 @@ class Game(object):
 		self.newDawn = False
 		
 		self.divider = "-" * 60
+		
+	def play(self):
+		print self.divider + "\n"
+		print "Welcome to FishE!\n"
+		print "[1] NEW GAME"
+		print "[2] LOAD GAME"
+		print "\n" + self.divider
+		
+		self.beginningOption = raw_input("\n> ")
+		
+		if self.beginningOption == "1":
+			self.dealWithInput()
+			
+		elif self.beginningOption == "2":
+			
+			with open(self.rawFile) as f: # opens the file and puts its contents into a list
+				self.content = f.readlines()
+			
+			self.content = [line.strip() for line in self.content] # strips lists of any whitespace
+			
+			self.day = int(self.content[0])
+			self.money = int(self.content[1])
+			self.fish = int(self.content[2])
+			
+			self.dealWithInput()
+			
+		else:
+			print "\nThat isn't an option!"
+			self.play()
 		
 	def increaseTime(self):
 		
@@ -123,13 +154,17 @@ class Game(object):
 			
 			if decision == '1':
 				return "fish"
+				
 			elif decision == '2':
 				return "store"
+				
 			elif decision == '3':
 				return "home"
+				
+			# for some reason this else statement breaks the program. Will figure out later.	
 			else:
 				raw_input("That wasn't an option! [ENTER TO CONTINUE]")
-				self.getInput()
+				self.dealWithInput() 
 				
 		if self.currentLocation == "store":
 			
@@ -187,6 +222,13 @@ class Game(object):
 			
 			self.day = self.day + 1
 			
+			# save important bits to savefile
+			self.theFile = open(self.rawFile, 'w')
+			
+			self.theFile.write("%d" % self.day)
+			self.theFile.write("\n%d" % self.money)
+			self.theFile.write("\n%d" % self.fish)
+			
 			raw_input("\n\n[CONTINUE]")
 			
 			self.dealWithInput()
@@ -209,7 +251,7 @@ class Game(object):
 		elif self.playerInput == "browse":
 			print "\n"
 			print self.divider
-			print "\nUnfortunately, they're out of fishing poles!"
+			print "\nUnfortunately, there is nothing for sale here."
 			print "\nYou sell %d fish for $%d" % (self.fish, self.fish * 2)
 			
 			self.money = self.money + (self.fish * 2)
@@ -260,4 +302,4 @@ class Game(object):
 if __name__ == "__main__":
 
 	myGame = Game()
-	myGame.dealWithInput()
+	myGame.play()
