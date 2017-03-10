@@ -160,8 +160,7 @@ class Game(object):
 				
 			elif decision == '3':
 				return "home"
-				
-			# for some reason this else statement breaks the program. Will figure out later.	
+					
 			else:
 				raw_input("That wasn't an option! [ENTER TO CONTINUE]")
 				self.dealWithInput() 
