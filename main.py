@@ -1,30 +1,100 @@
 import time
 import random
-from engine import Engine
 
 class Game(object):
 
-	def __init__(self, engine):
-		self.engine = engine
-		self.engine.currentLocation = "home"
+	def __init__(self):
+		self.currentLocation = "home"
+		
+	def getInput(self):
+		print "\n"
+		print "-" * 40
+		
+		if self.currentLocation == "home":
+			print "\nYou sit at home, twiddling your thumbs."
+			
+		if self.currentLocation == "docks":
+			print "\nYou sit on the edge of the docks, fishing pole in hand."
+		
+		if self.currentLocation == "store":
+			print "\nThe shopkeeper winks at you as you behold his collection of fishing poles."
+		
+		print "\nOPTIONS:"
+		
+		if self.currentLocation == "home":
+			print "\n\t[1] Sleep"
+			print "\n\t\t[2] Head to Docks"
+			print "\n\t\t\t[3] Go to store"
+			print "\n\t\t\t\t[4] View Collection"
+			
+			decision = raw_input("> ") 
+			
+			if decision == '1':
+				return "sleep"
+			elif decision == '2':
+				return "docks"
+			elif decision == '3':
+				return "store"
+			elif decision == '4':
+				return "collection"
+			else:
+				raw_input("That wasn't an option! [ENTER TO CONTINUE]")
+				self.getInput()
+		
+		if self.currentLocation == "docks":
+			print "\n\t[1] Fish!"
+			print "\n\t\t[2] Go to store"
+			print "\n\t\t\t[3] Go home"
+			
+			decision = raw_input("> ")
+			
+			if decision == '1':
+				return "fish"
+			elif decision == '2':
+				return "store"
+			elif decision == '3':
+				return "home"
+			else:
+				raw_input("That wasn't an option! [ENTER TO CONTINUE]")
+				self.getInput()
+				
+		if self.currentLocation == "store":
+			print "\n\t[1] Browse!"
+			print "\n\t\t[2] Head to Docks"
+			print "\n\t\t\t[3] Go home"
+			
+			decision = raw_input("> ")
+			
+			if decision == '1':
+				return "browse"
+			elif decision == '2':
+				return "docks"
+			elif decision == '3':
+				return "home"
+			else:
+				raw_input("That wasn't an option! [ENTER TO CONTINUE]")
+				self.getInput()
+				
+		print "\n"
+		print "-" * 40	
 		
 	def dealWithInput(self):
 		
-		self.playerInput = self.engine.getInput()
+		self.playerInput = self.getInput()
 		
 		if self.playerInput == "sleep":
 			pass
 			
 		elif self.playerInput == "docks":
-			self.engine.currentLocation = "docks"
+			self.currentLocation = "docks"
 			self.dealWithInput()
 			
 		elif self.playerInput == "store":
-			self.engine.currentLocation = "store"
+			self.currentLocation = "store"
 			self.dealWithInput()
 			
 		elif self.playerInput == "home":
-			self.engine.currentLocation = "home"
+			self.currentLocation = "home"
 			self.dealWithInput()
 			
 		elif self.playerInput == "collection":
@@ -54,6 +124,6 @@ class Game(object):
 			pass
 			
 if __name__ == "__main__":
-	myEngine = Engine()
-	myGame = Game(myEngine)
+
+	myGame = Game()
 	myGame.dealWithInput()
