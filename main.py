@@ -235,11 +235,15 @@ class Game(object):
 				self.increaseTime()
 				print "..."
 				
-				if self.currentTime == 5: # if player manages to stay up all night via fishing
+				if self.currentTime == 6: # if player manages to stay up all night via fishing
 					self.newDawn = True;
 		
 			time.sleep(1)
-			print "You caught one! It only took %d hours!\n" % seconds
+			
+			if seconds > 1:
+				print "You caught one! It only took %d hours!\n" % seconds
+			else:
+				print "You caught one! It only took %d hour!\n" % seconds
 			
 			if self.newDawn == True:
 				print "\nThe sight of the sunrise gives you new energy. You won't be needing sleep tonight.\n"
