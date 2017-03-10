@@ -23,3 +23,13 @@ You are a fisherman living in a home by the docks. There’s a store nearby that
 
 Collection Specifics
 Able to view how many fish you have on you or how many fish you’ve collected. Weight is random, etc.
+
+
+
+GOALS
+- Create a fish class that, when a new fish is created, randomizes the weight, color and kind of fish.
+- Create a collection class that has every type of fish listed and which ones you've caught
+- Create an inventory action that lets you view the fish you currently have
+- Make it so you can sell fish to shopkeep
+- Have $ on screen at all times
+- Have time on screen at all times
