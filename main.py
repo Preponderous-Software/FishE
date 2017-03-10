@@ -131,7 +131,7 @@ class Game(object):
 				return "collection"
 			else:
 				raw_input("That wasn't an option! [ENTER TO CONTINUE]")
-				self.getInput()
+				self.dealWithInput()
 		
 		if self.currentLocation == "docks":
 			
