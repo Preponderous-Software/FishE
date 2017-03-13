@@ -18,8 +18,15 @@ class Game(object):
 		self.money = 0
 
 	def play(self):
-		# add saving and loading here
-		self.home("Welcome to the game!")
+		self.li = ["New Game", "Load Game"]
+		self.input = template.showOptions("Welcome to the game!", "Would you like to start a new game or load your last save?", self.li, 999, 8)
+		
+		if self.input == "1":
+			self.home("What would you like to do?")
+			
+		elif self.input == "2":
+			self.loadGame()
+			self.home("What would you like to do?")
 		
 	def increaseTime(self):
 		self.time += 1
@@ -28,12 +35,30 @@ class Game(object):
 			self.time = 0
 			
 		if 0 <= self.time <= 7: # returns player home if it's late
+			
 			self.day += 1
 			self.time = 8
 			self.home("You were too tired to do anything else but go home and sleep. Good morning.")
+			
+	def saveGame(self):
+		self.file = open("savefile.txt", 'w')
+		
+		self.file.write("%d" % self.day)
+		self.file.write("\n%d" % self.fishCount)
+		self.file.write("\n%d" % self.money)
+			
+	def loadGame(self):
+		with open("savefile.txt") as f:
+			self.content = f.readlines()
+				
+		self.day = int(self.content[0])
+		self.fishCount = int(self.content[1])
+		self.money = int(self.content[2])
 
 # LOCATIONS -------------------------------------------------------------------------------------------------------------------------	
 	def home(self, p):
+		self.saveGame()
+		
 		self.prompt = p
 		self.li = ["Sleep", "Go to Docks", "Go to Shop", "Check Inventory"]
 		self.input = template.showOptions("You sit at home, polishing one of your prized fishing poles.", self.prompt, self.li, self.day, self.time)
@@ -95,9 +120,13 @@ class Game(object):
 			
 # ACTIONS -------------------------------------------------------------------------------------------------------------------------	
 	def sleep(self):
-		self.time = 8
-		self.day += 1
-		self.home("You sleep until next morning.")
+		if self.time > 20:			
+			self.time = 8
+			self.day += 1
+			self.home("You had a good night's rest.")
+		
+		else:
+			self.home("You're not tired!")
 		
 	def fish(self):
 		template.lotsOfSpace()
