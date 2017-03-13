@@ -74,5 +74,3 @@ if __name__ == "__main__":
 	li = ["Eat", "Drink", "Dance"]
 	i = myAdventure.showOptions("make a choice", li)
 	print i
-	
-# note to self, add optional stats
