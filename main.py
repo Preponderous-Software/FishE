@@ -1,304 +1,147 @@
+from textAdventure import Text_Adventure_Template
 import time
 import random
+import sys
+
+
+template = Text_Adventure_Template()
 
 class Game(object):
 
-	rawFile = ("savefile.txt")
-
 	def __init__(self):
-		self.currentLocation = "home"
-		self.times = {0: "12:00 AM",
-				    1: "1:00 AM",
-				    2: "2:00 AM",
-				    3: "3:00 AM",
-				    4: "4:00 AM",
-				    5: "5:00 AM",
-				    6: "6:00 AM",
-				    7: "7:00 AM",
-				    8: "8:00 AM",
-				    9: "9:00 AM",
-				    10: "10:00 AM",
-				    11: "11:00 AM",
-				    12: "12:00 PM",
-				    13: "1:00 PM",
-				    14: "2:00 PM",
-				    15: "3:00 PM",
-				    16: "4:00 PM",
-				    17: "5:00 PM",
-				    18: "6:00 PM",
-				    19: "7:00 PM",
-				    20: "8:00 PM", 
-				    21: "9:00 PM",
-				    22: "10:00 PM", 
-				    23: "11:00 PM"}
-
-		self.currentTime = 6
+		self.options = []
 		
 		self.day = 1
+		self.time = 8
 		
+		self.fishCount = 0
 		self.money = 0
-		
-		self.fish = 0
-		
-		self.newDawn = False
-		
-		self.divider = "-" * 60
-		
+
 	def play(self):
-		print self.divider + "\n"
-		print "Welcome to FishE!\n"
-		print "[1] NEW GAME"
-		print "[2] LOAD GAME"
-		print "\n" + self.divider
-		
-		self.beginningOption = raw_input("\n> ")
-		
-		if self.beginningOption == "1":
-			self.dealWithInput()
-			
-		elif self.beginningOption == "2":
-			
-			with open(self.rawFile) as f: # opens the file and puts its contents into a list
-				self.content = f.readlines()
-			
-			self.content = [line.strip() for line in self.content] # strips lists of any whitespace
-			
-			self.day = int(self.content[0])
-			self.money = int(self.content[1])
-			self.fish = int(self.content[2])
-			
-			self.dealWithInput()
-			
-		else:
-			print "\nThat isn't an option!"
-			self.play()
+		# add saving and loading here
+		self.home("Welcome to the game!")
 		
 	def increaseTime(self):
+		self.time += 1
 		
-		self.currentTime = self.currentTime + 1
-		
-		if self.currentTime == 5:
-			self.day = self.day + 1
-		
-		if self.currentTime > 23:
-			self.currentTime = 1
-		
-	def getInput(self):
-		print "\n"
-		print self.divider
-		print "\nDay %d" % self.day
-		print "\nTime: " + self.times[self.currentTime]
-		print "\nMoney: $%d" % self.money
-		print "\nFish: %d" % self.fish
-		
-		if self.currentLocation == "home":
-			print "\nYou sit at home, twiddling your thumbs."
+		if self.time > 23:
+			self.time = 0
 			
-		if self.currentLocation == "docks":
-			print "\nYou sit on the edge of the docks, fishing pole in hand."
-		
-		if self.currentLocation == "store":
-			print "\nThe shopkeeper winks at you as you behold his collection of fishing poles."
-		
-		print "\nOPTIONS:"
-		
-		if self.currentLocation == "home":
-			
-			if 22 <= self.currentTime <= 24 or 1 <= self.currentTime < 6:
-				print "\nYou're too tired to do anything but sleep."
-				
-				print "\n"
-				print self.divider
-				
-				raw_input("\n\n[CONTINUE]")
-				
-				self.currentLocation = "home"
-				return "sleep" 
-			
-			print "\n\t[1] Sleep"
-			print "\n\t\t[2] Head to Docks"
-			print "\n\t\t\t[3] Go to store"
-			
-			decision = raw_input("> ") 
-			
-			if decision == '1':
-				return "sleep"
-			elif decision == '2':
-				return "docks"
-			elif decision == '3':
-				return "store"
-			elif decision == '4':
-				return "collection"
-			else:
-				raw_input("That wasn't an option! [ENTER TO CONTINUE]")
-				self.dealWithInput()
-		
-		if self.currentLocation == "docks":
-			
-			if 22 <= self.currentTime <= 24 or 1 <= self.currentTime < 6:
-				print "\nYou're too tired to do anything but go home and sleep."
-				
-				print "\n"
-				print self.divider
-				
-				raw_input("\n\n[CONTINUE]")
-				
-				self.currentLocation = "home"
-				return "sleep" 
-			
-			print "\n\t[1] Fish!"
-			print "\n\t\t[2] Go to store"
-			print "\n\t\t\t[3] Go home"
-			
-			decision = raw_input("> ")
-			
-			if decision == '1':
-				return "fish"
-				
-			elif decision == '2':
-				return "store"
-				
-			elif decision == '3':
-				return "home"
-					
-			else:
-				raw_input("That wasn't an option! [ENTER TO CONTINUE]")
-				self.dealWithInput() 
-				
-		if self.currentLocation == "store":
-			
-			if 22 <= self.currentTime <= 24 or 1 <= self.currentTime < 6:
-				print "\nYou're too tired to do anything but go home and sleep."
-				
-				print "\n"
-				print self.divider
-				
-				raw_input("\n\n[CONTINUE]")
-				
-				self.currentLocation = "home"
-				return "sleep" 
-			
-			print "\n\t[1] Browse/Sell!"
-			print "\n\t\t[2] Head to Docks"
-			print "\n\t\t\t[3] Go home"
-			
-			decision = raw_input("> ")
-			
-			if decision == '1':
-				return "browse"
-			elif decision == '2':
-				return "docks"
-			elif decision == '3':
-				return "home"
-			else:
-				raw_input("That wasn't an option! [ENTER TO CONTINUE]")
-				self.getInput()
-				
-		print "\n"
-		print self.divider
-		
-	def dealWithInput(self):
-		
-		self.playerInput = self.getInput()
-		
-		if self.playerInput == "sleep":
-			
-			print "\n"
-			
-			print self.divider					
-			
-			print "\nYou pass into the world of dreams."
-			
-			self.currentTime = 8
-			
-			for i in range(0,3):
-				time.sleep(1)
-				print "..."
-				
-			print "\nYou wake up feeling refreshed.\n"
-			
-			print self.divider
-			
-			self.day = self.day + 1
-			
-			# save important bits to savefile
-			self.theFile = open(self.rawFile, 'w')
-			
-			self.theFile.write("%d" % self.day)
-			self.theFile.write("\n%d" % self.money)
-			self.theFile.write("\n%d" % self.fish)
-			
-			raw_input("\n\n[CONTINUE]")
-			
-			self.dealWithInput()
-			
-		elif self.playerInput == "docks":
-			self.currentLocation = "docks"
-			self.increaseTime()
-			self.dealWithInput()
-			
-		elif self.playerInput == "store":
-			self.currentLocation = "store"
-			self.increaseTime()
-			self.dealWithInput()
-			
-		elif self.playerInput == "home":
-			self.currentLocation = "home"
-			self.increaseTime()
-			self.dealWithInput()
-			
-		elif self.playerInput == "browse":
-			print "\n"
-			print self.divider
-			print "\nUnfortunately, there is nothing for sale here."
-			print "\nYou sell %d fish for $%d" % (self.fish, self.fish * 2)
-			
-			self.money = self.money + (self.fish * 2)
-			self.fish = 0
-			
-			print "\n"
-			print self.divider
-			
-			raw_input("\n\n[CONTINUE]")
-			
-			self.increaseTime()
-			self.dealWithInput()
-			
-		elif self.playerInput == "fish":
-			print "\n"
-			print self.divider
-			print "\nYou cast your line, hoping for a bite."
+		if 0 <= self.time <= 7: # returns player home if it's late
+			self.day += 1
+			self.time = 8
+			self.home("You were too tired to do anything else but go home and sleep. Good morning.")
 
-			seconds = random.randint(1,10)
-
-			for i in range(0,seconds):
-				time.sleep(1)
-				self.increaseTime()
-				print "..."
-				
-				if self.currentTime == 6: # if player manages to stay up all night via fishing
-					self.newDawn = True;
+# LOCATIONS -------------------------------------------------------------------------------------------------------------------------	
+	def home(self, p):
+		self.prompt = p
+		self.li = ["Sleep", "Go to Docks", "Go to Shop", "Check Inventory"]
+		self.input = template.showOptions("You sit at home, polishing one of your prized fishing poles.", self.prompt, self.li, self.day, self.time)
 		
+		if self.input == "1":
+			self.sleep()
+			
+		elif self.input == "2":
+			self.increaseTime()
+			self.docks("What would you like to do?")
+			
+		elif self.input == "3":
+			self.increaseTime()
+			self.shop("What would you like to do?")
+		
+		elif self.input == "4":
+			self.checkInventory()
+			self.home("What would you like to do?")
+				
+	def docks(self, p):
+		self.prompt = p
+		self.li = ["Fish", "Go Home", "Go to Shop", "Check Inventory"]
+		self.input = template.showOptions("You breathe in the fresh air. Salty.", self.prompt, self.li, self.day, self.time)
+		
+		if self.input == "1":
+			self.fish()
+			
+		elif self.input == "2":
+			self.increaseTime()
+			self.home("What would you like to do?")
+			
+		elif self.input == "3":
+			self.increaseTime()
+			self.shop("What would you like to do?")
+		
+		elif self.input == "4":
+			self.checkInventory()
+			self.docks("What would you like to do?")
+	
+	def shop(self, p):
+		self.prompt = p
+		self.li = ["Buy/Sell", "Go Home", "Go to Docks", "Check Inventory"]
+		self.input = template.showOptions("The shopkeeper winks at you as you behold his collection of fishing poles.", self.prompt, self.li, self.day, self.time)
+		
+		if self.input == "1":
+			self.buysell("What would you like to do?")
+			
+		elif self.input == "2":
+			self.increaseTime()
+			self.home("What would you like to do?")
+			
+		elif self.input == "3":
+			self.increaseTime()
+			self.docks("What would you like to do?")
+		
+		elif self.input == "4":
+			self.checkInventory()
+			self.shop("What would you like to do?")
+			
+# ACTIONS -------------------------------------------------------------------------------------------------------------------------	
+	def sleep(self):
+		self.time = 8
+		self.day += 1
+		self.home("You sleep until next morning.")
+		
+	def fish(self):
+		template.lotsOfSpace()
+		template.divider()
+		
+		print "Fishing... ",
+		sys.stdout.flush()
+		time.sleep(1)
+		
+		hours = random.randint(1, 10)
+		
+		for i in range(hours):
+			print "><> ",
+			sys.stdout.flush()
 			time.sleep(1)
+			self.increaseTime()
+		
+		self.fishCount += 1
+		
+		if hours == 1:
+			self.docks("Nice catch! It only took %d hour!" % hours)
+		else:
+			self.docks("Nice catch! It only took %d hours!" % hours)
+				
+	def buysell(self, p):
+		self.prompt = p
+		self.li = ["Sell Fish", "Back"]
+		self.input = template.showOptions("The shopkeeper waits for you to make a decision.", self.prompt, self.li, self.day, self.time)
+		
+		if self.input == "1":
+			self.money += self.fishCount * 5
+			self.fishCount = 0
 			
-			if seconds > 1:
-				print "You caught one! It only took %d hours!\n" % seconds
-			else:
-				print "You caught one! It only took %d hour!\n" % seconds
-			
-			if self.newDawn == True:
-				print "\nThe sight of the sunrise gives you new energy. You won't be needing sleep tonight.\n"
-				self.newDawn = False
-			
-			self.fish = self.fish + 1
-			
-			print self.divider
-			
-			raw_input("\n\n[CONTINUE]")
-			
-			self.dealWithInput()
-			
-if __name__ == "__main__":
+			self.buysell("You sold all of your fish!")
+		elif self.input == "2":
+			self.shop("What now, moneybags?")
+	
+	def checkInventory(self):
+		template.lotsOfSpace()
+		template.divider()
+		print "Fish: %d " % self.fishCount,
+		print "| Money: $%d" % self.money
+		template.divider()
+		raw_input(" [ CONTINUE ]")
 
-	myGame = Game()
-	myGame.play()
+FishE = Game()
+FishE.play()
