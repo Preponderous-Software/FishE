@@ -3,8 +3,6 @@ You are a fisherman living in a home by the docks. There’s a store nearby that
 
 
 GOALS
-- Save/Load capabilities
 - Create a bank
 - Have the shopkeeper sell bait that lets you have a chance at double the fish
 - Make a tavern where you can bet money
-- Make it so it has to be past 8 to go to sleep
