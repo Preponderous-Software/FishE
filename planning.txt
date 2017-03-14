@@ -4,5 +4,9 @@ You are a fisherman living in a home by the docks. There’s a store nearby that
 
 GOALS
 - Create a bank
-- Have the shopkeeper sell bait that lets you have a chance at double the fish
-- Make a tavern where you can bet money
+- Make gambling
+- Make drinking alternative to sleeping
+
+Maybes
+- Maybe include something that tells you where you are
+- Maybe make the fishMultiplier a chance thing
