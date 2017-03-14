@@ -5,7 +5,10 @@ You are a fisherman living in a home by the docks. There’s a store nearby that
 GOALS
 - Make gambling
 - Make drinking alternative to sleeping
+- Add times gotten drunk
+- Add $ lost gambling
 
 Maybes
 - Maybe include something that tells you where you are
 - Maybe make the fishMultiplier a chance thing
+- Maybe make it more expensive each purchase to buy better bait

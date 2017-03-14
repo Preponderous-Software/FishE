@@ -40,19 +40,23 @@ class Text_Adventure_Template(object):
 		print "-" * 75
 		print "\n"
 		
-	def showOptions(self, descriptor, prompt, optionList, dayVariable, timeVariable):
+	def showOptions(self, descriptor, prompt, optionList, dayVariable, timeVariable, moneyVariable, fishVariable):
 		self.descriptor = descriptor
 		self.prompt = prompt
 		self.optionList = optionList
 		self.dayVariable = dayVariable
 		self.timeVariable = timeVariable		
+		self.moneyVariable = moneyVariable
+		self.fishVariable = fishVariable
 		
 		self.lotsOfSpace()
 		self.divider()
 		print " " + self.descriptor
 		self.divider()
-		print " Day %d" % self.dayVariable
-		print " " + self.times[self.timeVariable]
+		print " Day %d" % self.dayVariable,
+		print " | " + self.times[self.timeVariable],
+		print " | Money: $%d" % self.moneyVariable,
+		print " | Fish: %d" % self.fishVariable
 		print "\n " + self.prompt
 		self.divider()
 		self.n = 1
@@ -67,7 +71,7 @@ class Text_Adventure_Template(object):
 			if self.choice == i:
 				return self.choice
 		self.changePrompt = "Try again!"
-		return self.showOptions(self.descriptor, self.changePrompt, self.optionList, self.dayVariable, self.timeVariable)
+		return self.showOptions(self.descriptor, self.changePrompt, self.optionList, self.dayVariable, self.timeVariable, self.moneyVariable, self.fishVariable)
 		
 if __name__ == "__main__":
 	myAdventure = TextAdventure()
