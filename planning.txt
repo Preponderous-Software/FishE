@@ -3,7 +3,6 @@ You are a fisherman living in a home by the docks. There’s a store nearby that
 
 
 GOALS
-- Create a bank
 - Make gambling
 - Make drinking alternative to sleeping
 
