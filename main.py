@@ -29,6 +29,7 @@ class Game(object):
 		self.moneyLostFromGambling = 0
 		
 		self.currentBet = 0
+		self.priceForBait = 50
 
 	def play(self):
 		self.li = ["New Game", "Load Game"]
@@ -171,7 +172,7 @@ class Game(object):
 			self.increaseTime()
 			self.docks("What would you like to do?")
 			
-	def bank(self, p): # IN DEVELOPMENT
+	def bank(self, p):
 		self.prompt = p
 		self.li = ["Make a Deposit", "Make a Withdrawal", "Go to docks"]
 		self.input = template.showOptions("You're at the front of the line and the teller asks you what you want to do.", self.prompt, self.li, self.day, self.time, self.money, self.fishCount)
@@ -235,7 +236,7 @@ class Game(object):
 				
 	def buysell(self, p):
 		self.prompt = p
-		self.li = ["Sell Fish", "Buy Better Bait ( $50 )",  "Back"]
+		self.li = ["Sell Fish", "Buy Better Bait ( $%d )" % self.priceForBait,  "Back"]
 		self.input = template.showOptions("The shopkeeper waits for you to make a decision.", self.prompt, self.li, self.day, self.time, self.money, self.fishCount)
 		
 		if self.input == "1":
@@ -246,11 +247,14 @@ class Game(object):
 			self.buysell("You sold all of your fish!")
 			
 		elif self.input == "2":
-			if self.money < 50:
+			if self.money < self.priceForBait:
 				self.buysell("You don't have enough money!")
 			else:
 				self.fishMultiplier += 1
-				self.money -= 50	
+				self.money -= self.priceForBait
+				
+				self.priceForBait = self.priceForBait * 1.25
+				
 				self.buysell("You bought some better bait!")	
 			
 		elif self.input == "3":
