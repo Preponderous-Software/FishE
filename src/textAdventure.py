@@ -33,12 +33,12 @@ class Text_Adventure_Template(object):
 				    23: "11:00 PM"}		
 		
 	def lotsOfSpace(self):
-		print "\n" * 20
+		print("\n" * 20)
 		
 	def divider(self):
-		print "\n"
-		print "-" * 75
-		print "\n"
+		print("\n")
+		print("-" * 75)
+		print("\n")
 		
 	def showOptions(self, descriptor, prompt, optionList, dayVariable, timeVariable, moneyVariable, fishVariable):
 		self.descriptor = descriptor
@@ -51,18 +51,18 @@ class Text_Adventure_Template(object):
 		
 		self.lotsOfSpace()
 		self.divider()
-		print " " + self.descriptor
+		print(" " + self.descriptor)
 		self.divider()
-		print " Day %d" % self.dayVariable,
-		print " | " + self.times[self.timeVariable],
-		print " | Money: $%d" % self.moneyVariable,
-		print " | Fish: %d" % self.fishVariable
-		print "\n " + self.prompt
+		print(" Day %d" % self.dayVariable)
+		print(" | " + self.times[self.timeVariable])
+		print(" | Money: $%d" % self.moneyVariable)
+		print(" | Fish: %d" % self.fishVariable)
+		print("\n " + self.prompt)
 		self.divider()
 		self.n = 1
 		self.listOfN = []
 		for option in self.optionList:
-			print " [%d] %s" % (self.n, option)
+			print(" [%d] %s" % (self.n, option))
 			self.listOfN.append("%d" % self.n)
 			self.n += 1
 			
@@ -77,4 +77,4 @@ if __name__ == "__main__":
 	myAdventure = TextAdventure()
 	li = ["Eat", "Drink", "Dance"]
 	i = myAdventure.showOptions("make a choice", li)
-	print i
+	print(i)
