@@ -66,7 +66,7 @@ class Text_Adventure_Template(object):
 			self.listOfN.append("%d" % self.n)
 			self.n += 1
 			
-		self.choice = raw_input("\n> ")
+		self.choice = input("\n> ")
 		for i in self.listOfN:
 			if self.choice == i:
 				return self.choice

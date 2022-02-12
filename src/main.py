@@ -323,7 +323,7 @@ class Game(object):
 		template.divider()
 		
 		try:
-			self.amount = int(raw_input("> "))
+			self.amount = int(input("> "))
 		except ValueError:
 			self.deposit("Try again. Money: $%d" % self.money)
 			
@@ -342,7 +342,7 @@ class Game(object):
 		template.divider()
 		
 		try:
-			self.amount = int(raw_input("> "))
+			self.amount = int(input("> "))
 		except ValueError:
 			self.deposit("Try again. Money: $%d" % self.money)
 			
@@ -363,7 +363,7 @@ class Game(object):
 		template.divider()
 		
 		try:
-			self.amount = int(raw_input("> "))
+			self.amount = int(input("> "))
 		except ValueError:
 			self.withdraw("Try again. Money In Bank: $%d" % self.moneyInBank)
 			
