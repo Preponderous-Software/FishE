@@ -206,14 +206,14 @@ class Game(object):
 		template.lotsOfSpace()
 		template.divider()
 		
-		print "Fishing... ",
+		print("Fishing... "),
 		sys.stdout.flush()
 		time.sleep(1)
 		
 		hours = random.randint(1, 10)
 		
 		for i in range(hours):
-			print "><> ",
+			print("><> ")
 			sys.stdout.flush()
 			time.sleep(1)
 			self.increaseTime()
@@ -264,15 +264,15 @@ class Game(object):
 	def seeStats(self):
 		template.lotsOfSpace()
 		template.divider()
-		print "Total Fish Caught: %d " % self.totalFishCaught,
-		print "| Total Money Made: $%d " % self.totalMoneyMade,
-		print "| Hours Spent Fishing: %d" % self.hoursSpentFishing
+		print("Total Fish Caught: " + self.totalFishCaught)
+		print("| Total Money Made: " + self.totalMoneyMade)
+		print("| Hours Spent Fishing: " + self.hoursSpentFishing)
 		template.divider()
-		print "Money Made From Interest: $%d" % self.moneyMadeFromInterest,
-		print "| Times Gotten Drunk: %d" % self.timesGottenDrunk,
-		print "| Money Lost Gambling: $%d" % self.moneyLostFromGambling	
+		print("Money Made From Interest: " + self.moneyMadeFromInterest)
+		print("| Times Gotten Drunk: " % self.timesGottenDrunk)
+		print("| Money Lost Gambling: " % self.moneyLostFromGambling)
 		template.divider()
-		raw_input(" [ CONTINUE ]")	
+		input(" [ CONTINUE ]")	
 		
 	def getDrunk(self):
 		template.lotsOfSpace()
@@ -281,7 +281,7 @@ class Game(object):
 		self.money -= 10
 		
 		for i in range(3):
-			print "... ",
+			print("... ")
 			sys.stdout.flush()
 			time.sleep(1)
 		
@@ -308,13 +308,10 @@ class Game(object):
 				self.moneyLostFromGambling += self.currentBet
 				self.currentBet = 0
 				self.gamble("The dice rolled a %d! You lost your money! Care to try again? Current Bet: $%d" % (self.diceThrow, self.currentBet))
-		
 		elif self.input == 7:
-			 self.changeBet("How much money would you like to bet? Money: $%d" % self.money)
-		
+			self.changeBet("How much money would you like to bet? Money: $%d" % self.money)
 		elif self.input == 8:
-			self.tavern("What would you like to do?")
-			
+			self.tavern("What would you like to do?")	
 		else:
 			self.gamble("You didn't bet any money! What will the dice land on? Current Bet: $%d" % self.currentBet)
 			 
@@ -322,7 +319,7 @@ class Game(object):
 		self.prompt = p
 		template.lotsOfSpace()
 		template.divider()
-		print self.prompt
+		print(self.prompt)
 		template.divider()
 		
 		try:
@@ -341,7 +338,7 @@ class Game(object):
 		self.prompt = p
 		template.lotsOfSpace()
 		template.divider()
-		print self.prompt
+		print(self.prompt)
 		template.divider()
 		
 		try:
@@ -362,7 +359,7 @@ class Game(object):
 		self.prompt = p
 		template.lotsOfSpace()
 		template.divider()
-		print self.prompt
+		print(self.prompt)
 		template.divider()
 		
 		try:
