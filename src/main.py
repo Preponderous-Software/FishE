@@ -1,4 +1,4 @@
-from src.textAdventure import Text_Adventure_Template
+from textAdventure import Text_Adventure_Template
 import time
 import random
 import sys
