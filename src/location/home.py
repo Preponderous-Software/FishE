@@ -2,7 +2,8 @@ class Home:
     def __init__(self, fishE):
         self.fishE = fishE
     
-    def run(self, p):	
+    def run(self, p):
+        
         self.prompt = p
         li = ["Sleep", "See Stats", "Go to Docks"]
         self.input = self.fishE.template.showOptions("You sit at home, polishing one of your prized fishing poles.", self.prompt, li, self.fishE.day, self.fishE.time, self.fishE.money, self.fishE.fishCount)

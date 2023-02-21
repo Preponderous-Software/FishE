@@ -37,7 +37,7 @@ class Docks:
 
         elif self.fishE.input == "5":
             self.fishE.increaseTime()
-            self.fishE.bank(
+            self.fishE.locations["bank"].run(
                 "What would you like to do? Money in Bank: $%d" % self.fishE.moneyInBank
             )
             
@@ -58,12 +58,12 @@ class Docks:
             self.fishE.increaseTime()
             self.fishE.stats.addHoursSpentFishing(1)
 
-        fishCount = 1 * self.fishE.fishMultiplier
-        self.fishE.stats.addFishCaught(fishCount)
+        self.fishE.fishCount = 1 * self.fishE.fishMultiplier
+        self.fishE.stats.addFishCaught(self.fishE.fishCount)
 
-        if fishCount == 1:
+        if self.fishE.fishCount == 1:
             self.fishE.locations["docks"].run("Nice catch! It only took %d hour!" % hours)
         else:
             self.fishE.locations["docks"].run(
-                "You caught %d fish! It only took %d hours!" % (fishCount, hours)
+                "You caught %d fish! It only took %d hours!" % (self.fishE.fishCount, hours)
             )

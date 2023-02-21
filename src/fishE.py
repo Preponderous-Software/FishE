@@ -1,4 +1,4 @@
-from location import docks, home, shop, tavern
+from location import bank, docks, home, shop, tavern
 from stats.stats import Stats
 from template.textAdventure import Text_Adventure_Template
 import time
@@ -32,7 +32,7 @@ class FishE:
             "docks": docks.Docks(self),
             "shop": shop.Shop(self),
             "tavern": tavern.Tavern(self),
-            "bank": self.bank,
+            "bank": bank.Bank(self),
         }
 
     def play(self):
@@ -113,153 +113,6 @@ class FishE:
         self.stats.moneyMadeFromInterest = int(self.content[8])
         self.stats.timesGottenDrunk = int(self.content[9])
         self.stats.moneyLostFromGambling = int(self.content[10])
-
-    # LOCATIONS -------------------------------------------------------------------------------------------------------------------------
-
-    def bank(self, p):
-        self.prompt = p
-        self.li = ["Make a Deposit", "Make a Withdrawal", "Go to docks"]
-        self.input = self.template.showOptions(
-            "You're at the front of the line and the teller asks you what you want to do.",
-            self.prompt,
-            self.li,
-            self.day,
-            self.time,
-            self.money,
-            self.fishCount,
-        )
-
-        if self.input == "1":
-            if self.money > 0:
-                self.deposit(
-                    "How much would you like to deposit? Money: $%d" % self.money
-                )
-            else:
-                self.bank("You don't have anything to deposit!")
-
-        elif self.input == "2":
-            if self.moneyInBank > 0:
-                self.withdraw(
-                    "How much would you like to withdraw? Money In Bank: $%d"
-                    % self.moneyInBank
-                )
-            else:
-                self.bank("You don't have any money in the bank!")
-
-        elif self.input == "3":
-            self.increaseTime()
-            self.locations["docks"].run("What would you like to do?")
-
-    # ACTIONS -------------------------------------------------------------------------------------------------------------------------
-
-    def gamble(self, p):
-        self.prompt = p
-        self.li = ["1", "2", "3", "4", "5", "6", "Change Bet", "Back"]
-        self.input = int(
-            self.template.showOptions(
-                "Once you place your bet, the burly man in front of you will throw the dice.",
-                self.prompt,
-                self.li,
-                self.day,
-                self.time,
-                self.money,
-                self.fishCount,
-            )
-        )
-
-        if 1 <= self.input <= 6 and self.currentBet > 0:
-            self.diceThrow = random.randint(1, 6)
-
-            if self.input == self.diceThrow:
-                self.money += self.currentBet
-                self.stats.addMoneyMade(self.currentBet)
-                self.currentBet = 0
-                self.gamble(
-                    "You guessed correctly! Care to try again? Current Bet: $%d"
-                    % self.currentBet
-                )
-            else:
-                self.money -= self.currentBet
-                self.stats.addMoneyLostFromGambling(self.currentBet)
-                self.currentBet = 0
-                self.gamble(
-                    "The dice rolled a %d! You lost your money! Care to try again? Current Bet: $%d"
-                    % (self.diceThrow, self.currentBet)
-                )
-        elif self.input == 7:
-            self.changeBet(
-                "How much money would you like to bet? Money: $%d" % self.money
-            )
-        elif self.input == 8:
-            self.locations["tavern"].run("What would you like to do?")
-        else:
-            self.gamble(
-                "You didn't bet any money! What will the dice land on? Current Bet: $%d"
-                % self.currentBet
-            )
-
-    def changeBet(self, p):
-        self.prompt = p
-        self.template.lotsOfSpace()
-        self.template.divider()
-        print(self.prompt)
-        self.template.divider()
-
-        try:
-            self.amount = int(input("> "))
-        except ValueError:
-            self.deposit("Try again. Money: $%d" % self.money)
-
-        if self.amount <= self.money:
-            self.currentBet = self.amount
-
-            self.gamble(
-                "What will the dice land on? Current Bet: $%d" % self.currentBet
-            )
-        else:
-            self.deposit(
-                "You don't have that much money on you! Money: $%d" % self.money
-            )
-
-    def deposit(self, p):
-        self.prompt = p
-        self.template.lotsOfSpace()
-        self.template.divider()
-        print(self.prompt)
-        self.template.divider()
-
-        try:
-            self.amount = int(input("> "))
-        except ValueError:
-            self.deposit("Try again. Money: $%d" % self.money)
-
-        if self.amount <= self.money:
-            self.moneyInBank += self.amount
-            self.money -= self.amount
-
-            self.bank("$%d deposited successfully." % self.amount)
-        else:
-            self.bank("You don't have that much money on you!")
-
-    def withdraw(self, p):
-        self.prompt = p
-        self.template.lotsOfSpace()
-        self.template.divider()
-        print(self.prompt)
-        self.template.divider()
-
-        try:
-            self.amount = int(input("> "))
-        except ValueError:
-            self.withdraw("Try again. Money In Bank: $%d" % self.moneyInBank)
-
-        if self.amount <= self.moneyInBank:
-            self.money += self.amount
-            self.moneyInBank -= self.amount
-
-            self.bank("$%d withdrawn successfully." % self.amount)
-        else:
-            self.bank("You don't have that much money in the bank!")
 
 
 FishE = FishE()
