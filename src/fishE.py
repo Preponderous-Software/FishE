@@ -1,6 +1,6 @@
 from location import home
-from stats import Stats
-from textAdventure import Text_Adventure_Template
+from stats.stats import Stats
+from template.textAdventure import Text_Adventure_Template
 import time
 import random
 import sys
