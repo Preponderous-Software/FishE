@@ -16,7 +16,14 @@ class Home:
         
         elif self.input == "3":
             self.fishE.increaseTime()
-            self.fishE.docks("What would you like to do?")
+            self.fishE.locations["docks"].run("What would you like to do?")
+            
+    def sleep(self):
+        if self.fishE.time > 20:
+            self.fishE.increaseDay()
+            self.fishE.locations["home"].run("You had a good night's rest.")
+        else:
+            self.fishE.locations["home"].run("You're not tired!")
 
     def displayStats(self):
         self.fishE.template.lotsOfSpace()

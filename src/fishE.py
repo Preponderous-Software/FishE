@@ -1,4 +1,4 @@
-from location import home
+from location import docks, home
 from stats.stats import Stats
 from template.textAdventure import Text_Adventure_Template
 import time
@@ -29,7 +29,7 @@ class FishE:
 
         self.locations = {
             "home": home.Home(self),
-            "docks": self.docks,
+            "docks": docks.Docks(self),
             "shop": self.shop,
             "tavern": self.tavern,
             "bank": self.bank,
@@ -116,40 +116,6 @@ class FishE:
 
     # LOCATIONS -------------------------------------------------------------------------------------------------------------------------
 
-    def docks(self, p):
-        self.prompt = p
-        self.li = ["Fish", "Go Home", "Go to Shop", "Go to Tavern", "Go to Bank"]
-        self.input = self.template.showOptions(
-            "You breathe in the fresh air. Salty.",
-            self.prompt,
-            self.li,
-            self.day,
-            self.time,
-            self.money,
-            self.fishCount,
-        )
-
-        if self.input == "1":
-            self.fish()
-
-        elif self.input == "2":
-            self.increaseTime()
-            self.locations["home"].run("What would you like to do?")
-
-        elif self.input == "3":
-            self.increaseTime()
-            self.shop("What would you like to do?")
-
-        elif self.input == "4":
-            self.increaseTime()
-            self.tavern("What would you like to do?")
-
-        elif self.input == "5":
-            self.increaseTime()
-            self.bank(
-                "What would you like to do? Money in Bank: $%d" % self.moneyInBank
-            )
-
     def shop(self, p):
         self.prompt = p
         self.li = ["Buy/Sell", "Go to Docks"]
@@ -168,7 +134,7 @@ class FishE:
 
         elif self.input == "2":
             self.increaseTime()
-            self.docks("What would you like to do?")
+            self.locations["docks"].run("What would you like to do?")
 
     def tavern(self, p):
         self.prompt = p
@@ -196,7 +162,7 @@ class FishE:
 
         elif self.input == "3":
             self.increaseTime()
-            self.docks("What would you like to do?")
+            self.locations["docks"].run("What would you like to do?")
 
     def bank(self, p):
         self.prompt = p
@@ -230,43 +196,9 @@ class FishE:
 
         elif self.input == "3":
             self.increaseTime()
-            self.docks("What would you like to do?")
+            self.locations["docks"].run("What would you like to do?")
 
     # ACTIONS -------------------------------------------------------------------------------------------------------------------------
-    def sleep(self):
-        if self.time > 20:
-            self.increaseDay()
-            self.locations["home"].run("You had a good night's rest.")
-
-        else:
-            self.locations["home"].run("You're not tired!")
-
-    def fish(self):
-        self.template.lotsOfSpace()
-        self.template.divider()
-
-        print("Fishing... "),
-        sys.stdout.flush()
-        time.sleep(1)
-
-        hours = random.randint(1, 10)
-
-        for i in range(hours):
-            print("><> ")
-            sys.stdout.flush()
-            time.sleep(1)
-            self.increaseTime()
-            self.stats.addHoursSpentFishing(1)
-
-        fishCount = 1 * self.fishMultiplier
-        self.stats.addFishCaught(fishCount)
-
-        if fishCount == 1:
-            self.docks("Nice catch! It only took %d hour!" % hours)
-        else:
-            self.docks(
-                "You caught %d fish! It only took %d hours!" % (fishCount, hours)
-            )
 
     def buysell(self, p):
         self.prompt = p
