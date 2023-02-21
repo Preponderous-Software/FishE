@@ -1,4 +1,4 @@
-from location import docks, home
+from location import docks, home, shop
 from stats.stats import Stats
 from template.textAdventure import Text_Adventure_Template
 import time
@@ -30,7 +30,7 @@ class FishE:
         self.locations = {
             "home": home.Home(self),
             "docks": docks.Docks(self),
-            "shop": self.shop,
+            "shop": shop.Shop(self),
             "tavern": self.tavern,
             "bank": self.bank,
         }
@@ -116,26 +116,6 @@ class FishE:
 
     # LOCATIONS -------------------------------------------------------------------------------------------------------------------------
 
-    def shop(self, p):
-        self.prompt = p
-        self.li = ["Buy/Sell", "Go to Docks"]
-        self.input = self.template.showOptions(
-            "The shopkeeper winks at you as you behold his collection of fishing poles.",
-            self.prompt,
-            self.li,
-            self.day,
-            self.time,
-            self.money,
-            self.fishCount,
-        )
-
-        if self.input == "1":
-            self.buysell("What would you like to do?")
-
-        elif self.input == "2":
-            self.increaseTime()
-            self.locations["docks"].run("What would you like to do?")
-
     def tavern(self, p):
         self.prompt = p
         self.li = ["Get drunk ( $10 )", "Gamble", "Go to Docks"]
@@ -199,40 +179,6 @@ class FishE:
             self.locations["docks"].run("What would you like to do?")
 
     # ACTIONS -------------------------------------------------------------------------------------------------------------------------
-
-    def buysell(self, p):
-        self.prompt = p
-        self.li = ["Sell Fish", "Buy Better Bait ( $%d )" % self.priceForBait, "Back"]
-        self.input = self.template.showOptions(
-            "The shopkeeper waits for you to make a decision.",
-            self.prompt,
-            self.li,
-            self.day,
-            self.time,
-            self.money,
-            self.fishCount,
-        )
-
-        if self.input == "1":
-            self.money += self.fishCount * 5
-            self.stats.addMoneyMade(self.fishCount * 5)
-            self.fishCount = 0
-
-            self.buysell("You sold all of your fish!")
-
-        elif self.input == "2":
-            if self.money < self.priceForBait:
-                self.buysell("You don't have enough money!")
-            else:
-                self.fishMultiplier += 1
-                self.money -= self.priceForBait
-
-                self.priceForBait = self.priceForBait * 1.25
-
-                self.buysell("You bought some better bait!")
-
-        elif self.input == "3":
-            self.shop("What now, moneybags?")
 
     def getDrunk(self):
         self.template.lotsOfSpace()

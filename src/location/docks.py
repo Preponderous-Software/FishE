@@ -29,7 +29,7 @@ class Docks:
 
         elif self.fishE.input == "3":
             self.fishE.increaseTime()
-            self.fishE.shop("What would you like to do?")
+            self.fishE.locations["shop"].run("What would you like to do?")
 
         elif self.fishE.input == "4":
             self.fishE.increaseTime()
