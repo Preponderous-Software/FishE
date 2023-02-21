@@ -1,4 +1,4 @@
-from location import docks, home, shop
+from location import docks, home, shop, tavern
 from stats.stats import Stats
 from template.textAdventure import Text_Adventure_Template
 import time
@@ -31,7 +31,7 @@ class FishE:
             "home": home.Home(self),
             "docks": docks.Docks(self),
             "shop": shop.Shop(self),
-            "tavern": self.tavern,
+            "tavern": tavern.Tavern(self),
             "bank": self.bank,
         }
 
@@ -116,34 +116,6 @@ class FishE:
 
     # LOCATIONS -------------------------------------------------------------------------------------------------------------------------
 
-    def tavern(self, p):
-        self.prompt = p
-        self.li = ["Get drunk ( $10 )", "Gamble", "Go to Docks"]
-        self.input = self.template.showOptions(
-            "You sit at the bar, watching the barkeep clean a mug with a dirty rag.",
-            self.prompt,
-            self.li,
-            self.day,
-            self.time,
-            self.money,
-            self.fishCount,
-        )
-
-        if self.input == "1":
-            if self.money >= 10:
-                self.getDrunk()
-            else:
-                self.tavern("You don't have enough money!")
-
-        elif self.input == "2":
-            self.gamble(
-                "What will the dice land on? Current Bet: $%d" % self.currentBet
-            )
-
-        elif self.input == "3":
-            self.increaseTime()
-            self.locations["docks"].run("What would you like to do?")
-
     def bank(self, p):
         self.prompt = p
         self.li = ["Make a Deposit", "Make a Withdrawal", "Go to docks"]
@@ -179,22 +151,6 @@ class FishE:
             self.locations["docks"].run("What would you like to do?")
 
     # ACTIONS -------------------------------------------------------------------------------------------------------------------------
-
-    def getDrunk(self):
-        self.template.lotsOfSpace()
-        self.template.divider()
-
-        self.money -= 10
-
-        for i in range(3):
-            print("... ")
-            sys.stdout.flush()
-            time.sleep(1)
-
-        self.stats.addTimesGottenDrunk(1)
-
-        self.increaseDay()
-        self.locations["home"].run("Your head is pounding after last night.")
 
     def gamble(self, p):
         self.prompt = p
@@ -235,7 +191,7 @@ class FishE:
                 "How much money would you like to bet? Money: $%d" % self.money
             )
         elif self.input == 8:
-            self.tavern("What would you like to do?")
+            self.locations["tavern"].run("What would you like to do?")
         else:
             self.gamble(
                 "You didn't bet any money! What will the dice land on? Current Bet: $%d"
