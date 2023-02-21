@@ -1,3 +1,4 @@
+from stats import Stats
 from textAdventure import Text_Adventure_Template
 import time
 import random
@@ -7,7 +8,7 @@ import math
 
 template = Text_Adventure_Template()
 
-class Game(object):
+class FishE:
 
 	def __init__(self):
 		self.options = []
@@ -17,28 +18,22 @@ class Game(object):
 		
 		self.fishCount = 0
 		self.money = 0
-		self.moneyInBank = 0 # need to be able to save this
+		self.moneyInBank = 0
 		
 		self.fishMultiplier = 1
 		
-		self.totalFishCaught = 0
-		self.totalMoneyMade = 0
-		self.hoursSpentFishing = 0
-		self.moneyMadeFromInterest = 0
-		self.timesGottenDrunk = 0
-		self.moneyLostFromGambling = 0
+		self.stats = Stats()
 		
 		self.currentBet = 0
 		self.priceForBait = 50
 
 	def play(self):
-		self.li = ["New Game", "Load Game"]
-		self.input = template.showOptions("Welcome to the game!", "Would you like to start a new game or load your last save?", self.li, 999, 8, 999, 999)
+		li = ["New Game", "Load Game"]
+		input = template.showOptions("Welcome to the game!", "Would you like to start a new game or load your last save?", li, 999, 8, 999, 999)
 		
-		if self.input == "1":
-			self.home("What would you like to do?")
-			
-		elif self.input == "2":
+		if input == "1":
+			self.home("What would you like to do?")	
+		elif input == "2":
 			self.loadGame()
 			self.home("What would you like to do?")
 		
@@ -61,8 +56,8 @@ class Game(object):
 		self.saveGame()
 		
 		self.moneyInBank += int(math.ceil(self.moneyInBank * 0.10))
-		self.moneyMadeFromInterest += int(math.ceil(self.moneyInBank * 0.10))
-		self.totalMoneyMade += int(math.ceil(self.moneyInBank * 0.10))
+		self.stats.addMoneyMadeFromInterest(int(math.ceil(self.moneyInBank * 0.10)))
+		self.stats.addMoneyMade(int(math.ceil(self.moneyInBank * 0.10)))
 			
 	def saveGame(self):
 		self.file = open("savefile.txt", 'w')
@@ -75,12 +70,12 @@ class Game(object):
 		
 		self.file.write("\n%d" % self.fishMultiplier)
 		
-		self.file.write("\n%d" % self.totalFishCaught)
-		self.file.write("\n%d" % self.totalMoneyMade)
-		self.file.write("\n%d" % self.hoursSpentFishing)	
-		self.file.write("\n%d" % self.moneyMadeFromInterest)
-		self.file.write("\n%d" % self.timesGottenDrunk)		
-		self.file.write("\n%d" % self.moneyLostFromGambling)
+		self.file.write("\n%d" % self.stats.totalFishCaught)
+		self.file.write("\n%d" % self.stats.totalMoneyMade)
+		self.file.write("\n%d" % self.stats.hoursSpentFishing)	
+		self.file.write("\n%d" % self.stats.moneyMadeFromInterest)
+		self.file.write("\n%d" % self.stats.timesGottenDrunk)		
+		self.file.write("\n%d" % self.stats.moneyLostFromGambling)
 					
 	def loadGame(self):
 		with open("savefile.txt") as f:
@@ -94,12 +89,12 @@ class Game(object):
 		
 		self.fishMultiplier = int(self.content[4])
 		
-		self.totalFishCaught = int(self.content[5])
-		self.totalMoneyMade = int(self.content[6])
-		self.hoursSpentFishing = int(self.content[7])
-		self.moneyMadeFromInterest = int(self.content[8])
-		self.timesGottenDrunk = int(self.content[9])
-		self.moneyLostFromGambling = int(self.content[10])				
+		self.stats.totalFishCaught = int(self.content[5])
+		self.stats.totalMoneyMade = int(self.content[6])
+		self.stats.hoursSpentFishing = int(self.content[7])
+		self.stats.moneyMadeFromInterest = int(self.content[8])
+		self.stats.timesGottenDrunk = int(self.content[9])
+		self.stats.moneyLostFromGambling = int(self.content[10])				
 
 # LOCATIONS -------------------------------------------------------------------------------------------------------------------------	
 	def home(self, p):		
@@ -217,22 +212,15 @@ class Game(object):
 			sys.stdout.flush()
 			time.sleep(1)
 			self.increaseTime()
-			self.hoursSpentFishing += 1
+			self.stats.addHoursSpentFishing(1)
 		
-		self.fishCount += 1 * self.fishMultiplier
-		self.totalFishCaught += 1 * self.fishMultiplier
+		fishCount = 1 * self.fishMultiplier
+		self.stats.addFishCaught(fishCount)
 		
-		if self.fishMultiplier == 1:
-		
-			if hours == 1:
-				self.docks("Nice catch! It only took %d hour!" % hours)
-			else:
-				self.docks("Nice catch! It only took %d hours!" % hours)
+		if fishCount == 1:
+			self.docks("Nice catch! It only took %d hour!" % hours)
 		else:
-			if hours == 1:
-				self.docks("You caught %d fish! It only took %d hour!" % (self.fishMultiplier, hours))
-			else:
-				self.docks("You caught %d fish! It only took %d hours!" % (self.fishMultiplier, hours))
+			self.docks("You caught %d fish! It only took %d hours!" % (fishCount, hours))
 				
 	def buysell(self, p):
 		self.prompt = p
@@ -241,7 +229,7 @@ class Game(object):
 		
 		if self.input == "1":
 			self.money += self.fishCount * 5
-			self.totalMoneyMade += self.fishCount * 5
+			self.stats.addMoneyMade(self.fishCount * 5)
 			self.fishCount = 0
 			
 			self.buysell("You sold all of your fish!")
@@ -258,19 +246,18 @@ class Game(object):
 				self.buysell("You bought some better bait!")	
 			
 		elif self.input == "3":
-			self.shop("What now, moneybags?")
-	
+			self.shop("What now, moneybags?")	
 		
 	def seeStats(self):
 		template.lotsOfSpace()
 		template.divider()
-		print("Total Fish Caught: %d" % self.totalFishCaught)
-		print("| Total Money Made: %d" % self.totalMoneyMade)
-		print("| Hours Spent Fishing: %d" % self.hoursSpentFishing)
+		print("Total Fish Caught: %d" % self.stats.getTotalFishCaught())
+		print("| Total Money Made: %d" % self.stats.getTotalMoneyMade())
+		print("| Hours Spent Fishing: %d" % self.stats.getHoursSpentFishing())
 		template.divider()
-		print("Money Made From Interest: %d" % self.moneyMadeFromInterest)
-		print("| Times Gotten Drunk: %d" % self.timesGottenDrunk)
-		print("| Money Lost Gambling: %d" % self.moneyLostFromGambling)
+		print("Money Made From Interest: %d" % self.stats.getMoneyMadeFromInterest())
+		print("| Times Gotten Drunk: %d" % self.stats.getTimesGottenDrunk())
+		print("| Money Lost Gambling: %d" % self.stats.getMoneyLostFromGambling())
 		template.divider()
 		input(" [ CONTINUE ]")	
 		
@@ -285,7 +272,7 @@ class Game(object):
 			sys.stdout.flush()
 			time.sleep(1)
 		
-		self.timesGottenDrunk += 1
+		self.stats.addTimesGottenDrunk(1)
 		
 		self.increaseDay()
 		self.home("Your head is pounding after last night.")
@@ -300,12 +287,12 @@ class Game(object):
 			
 			if self.input == self.diceThrow:
 				self.money += self.currentBet
-				self.totalMoneyMade += self.currentBet
+				self.stats.addMoneyMade(self.currentBet)
 				self.currentBet = 0
 				self.gamble("You guessed correctly! Care to try again? Current Bet: $%d" % self.currentBet)
 			else:
 				self.money -= self.currentBet
-				self.moneyLostFromGambling += self.currentBet
+				self.stats.addMoneyLostFromGambling(self.currentBet)
 				self.currentBet = 0
 				self.gamble("The dice rolled a %d! You lost your money! Care to try again? Current Bet: $%d" % (self.diceThrow, self.currentBet))
 		elif self.input == 7:
@@ -375,7 +362,6 @@ class Game(object):
 			self.bank("$%d withdrawn successfully." % self.amount)
 		else:
 			self.bank("You don't have that much money in the bank!")
-		
 
-FishE = Game()
+FishE = FishE()
 FishE.play()
