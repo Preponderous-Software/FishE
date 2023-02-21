@@ -1,30 +1,34 @@
+from location.enum.locationType import LocationType
+
+
 class Home:
     def __init__(self, fishE):
         self.fishE = fishE
     
     def run(self, p):
-        
-        self.prompt = p
         li = ["Sleep", "See Stats", "Go to Docks"]
-        self.input = self.fishE.template.showOptions("You sit at home, polishing one of your prized fishing poles.", self.prompt, li, self.fishE.day, self.fishE.time, self.fishE.money, self.fishE.fishCount)
+        self.input = self.fishE.template.showOptions("You sit at home, polishing one of your prized fishing poles.", p, li, self.fishE.day, self.fishE.time, self.fishE.money, self.fishE.fishCount)
         
         if self.input == "1":
             self.sleep()
+            return LocationType.HOME
         
         elif self.input == "2":
             self.displayStats()
-            self.run("What would you like to do?")
+            self.fishE.currentPrompt = "What would you like to do?"
+            return LocationType.HOME
         
         elif self.input == "3":
             self.fishE.increaseTime()
-            self.fishE.locations["docks"].run("What would you like to do?")
+            self.fishE.currentPrompt = "What would you like to do?"
+            return LocationType.DOCKS
             
-    def sleep(self):
+    def sleep(self) -> str:
         if self.fishE.time > 20:
             self.fishE.increaseDay()
-            self.fishE.locations["home"].run("You had a good night's rest.")
+            self.fishE.currentPrompt = "What would you like to do?"
         else:
-            self.fishE.locations["home"].run("You're not tired!")
+            self.fishE.currentPrompt = "You can't sleep yet. What would you like to do?"
 
     def displayStats(self):
         self.fishE.template.lotsOfSpace()

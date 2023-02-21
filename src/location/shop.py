@@ -1,3 +1,6 @@
+from location.enum.locationType import LocationType
+
+
 class Shop:
     def __init__(self, fishE):
         self.fishE = fishE
@@ -17,10 +20,12 @@ class Shop:
 
         if self.fishE.input == "1":
             self.buysell("What would you like to do?")
+            return LocationType.SHOP
 
         elif self.fishE.input == "2":
             self.fishE.increaseTime()
-            self.fishE.locations["docks"].run("What would you like to do?")
+            self.fishE.currentPrompt = "What would you like to do?"
+            return LocationType.DOCKS
             
     def buysell(self, p):
         li = ["Sell Fish", "Buy Better Bait ( $%d )" % self.fishE.priceForBait, "Back"]
@@ -53,4 +58,4 @@ class Shop:
                 self.buysell("You bought some better bait!")
 
         elif self.fishE.input == "3":
-            self.fishE.locations["shop"].run("What now, moneybags?")
+            self.fishE.currentPrompt = "What would you like to do?"

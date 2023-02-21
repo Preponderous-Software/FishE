@@ -2,6 +2,8 @@ import random
 import sys
 import time
 
+from location.enum.locationType import LocationType
+
 
 class Docks:
     def __init__(self, fishE):
@@ -22,24 +24,27 @@ class Docks:
 
         if self.fishE.input == "1":
             self.fish()
+            return LocationType.DOCKS
 
         elif self.fishE.input == "2":
             self.fishE.increaseTime()
-            self.fishE.locations["home"].run("What would you like to do?")
+            self.fishE.currentPrompt = "What would you like to do?"
+            return LocationType.HOME
 
         elif self.fishE.input == "3":
             self.fishE.increaseTime()
-            self.fishE.locations["shop"].run("What would you like to do?")
+            self.fishE.currentPrompt = "What would you like to do?"
+            return LocationType.SHOP
 
         elif self.fishE.input == "4":
             self.fishE.increaseTime()
-            self.fishE.locations["tavern"].run("What would you like to do?")
+            self.fishE.currentPrompt = "What would you like to do?"
+            return LocationType.TAVERN
 
         elif self.fishE.input == "5":
             self.fishE.increaseTime()
-            self.fishE.locations["bank"].run(
-                "What would you like to do? Money in Bank: $%d" % self.fishE.moneyInBank
-            )
+            self.fishE.currentPrompt = "What would you like to do? Money in Bank: $%d" % self.fishE.moneyInBank
+            return LocationType.BANK
             
     def fish(self):
         self.fishE.template.lotsOfSpace()
@@ -62,8 +67,6 @@ class Docks:
         self.fishE.stats.addFishCaught(self.fishE.fishCount)
 
         if self.fishE.fishCount == 1:
-            self.fishE.locations["docks"].run("Nice catch! It only took %d hour!" % hours)
+            self.fishE.currentPrompt = "Nice catch! Hours taken: %d!" % hours
         else:
-            self.fishE.locations["docks"].run(
-                "You caught %d fish! It only took %d hours!" % (self.fishE.fishCount, hours)
-            )
+            self.fishE.currentPrompt = "You caught %d fish! It only took %d hours!" % (self.fishE.fishCount, hours)

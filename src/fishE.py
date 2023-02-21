@@ -1,4 +1,5 @@
 from location import bank, docks, home, shop, tavern
+from location.enum.locationType import LocationType
 from stats.stats import Stats
 from template.textAdventure import Text_Adventure_Template
 import time
@@ -9,6 +10,8 @@ import math
 
 class FishE:
     def __init__(self):
+        self.running = True
+        
         self.template = Text_Adventure_Template()
 
         self.options = []
@@ -28,12 +31,15 @@ class FishE:
         self.priceForBait = 50
 
         self.locations = {
-            "home": home.Home(self),
-            "docks": docks.Docks(self),
-            "shop": shop.Shop(self),
-            "tavern": tavern.Tavern(self),
-            "bank": bank.Bank(self),
+            LocationType.HOME: home.Home(self),
+            LocationType.DOCKS: docks.Docks(self),
+            LocationType.SHOP: shop.Shop(self),
+            LocationType.TAVERN: tavern.Tavern(self),
+            LocationType.BANK: bank.Bank(self)
         }
+        
+        self.currentLocation = LocationType.HOME
+        self.currentPrompt = "What would you like to do?"
 
     def play(self):
         li = ["New Game", "Load Game"]
@@ -47,11 +53,16 @@ class FishE:
             999,
         )
 
-        if input == "1":
-            self.locations["home"].run("What would you like to do?")
-        elif input == "2":
+        if input == "2":
             self.loadGame()
-            self.locations["home"].run("What would you like to do?")
+        
+        while self.running:
+            if self.currentLocation == None:
+                print("WARNING: currentLocation is None.")
+                
+            nextLocation = self.locations[self.currentLocation].run(self.currentPrompt)
+            self.currentLocation = nextLocation
+            
 
     def increaseTime(self):
         self.time += 1

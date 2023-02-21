@@ -2,6 +2,8 @@ import random
 import sys
 import time
 
+from location.enum.locationType import LocationType
+
 
 class Tavern:
     def __init__(self, fishE):
@@ -29,10 +31,12 @@ class Tavern:
             self.gamble(
                 "What will the dice land on? Current Bet: $%d" % self.fishE.currentBet
             )
+            return LocationType.TAVERN
 
         elif self.fishE.input == "3":
             self.fishE.increaseTime()
-            self.fishE.locations["docks"].run("What would you like to do?")
+            self.fishE.currentPrompt = "What would you like to do?"
+            return LocationType.DOCKS
             
     def getDrunk(self):
         self.fishE.template.lotsOfSpace()
@@ -48,7 +52,8 @@ class Tavern:
         self.fishE.stats.addTimesGottenDrunk(1)
 
         self.fishE.increaseDay()
-        self.fishE.locations["home"].run("Your head is pounding after last night.")
+        self.fishE.currentPrompt = "You have a headache."
+        return LocationType.HOME
         
     def gamble(self, p):
         li = ["1", "2", "3", "4", "5", "6", "Change Bet", "Back"]
@@ -88,12 +93,14 @@ class Tavern:
                 "How much money would you like to bet? Money: $%d" % self.money
             )
         elif self.input == 8:
-            self.fishE.locations["tavern"].run("What would you like to do?")
+            self.fishE.currentPrompt = "What would you like to do?"
+            return LocationType.TAVERN
         else:
             self.gamble(
                 "You didn't bet any money! What will the dice land on? Current Bet: $%d"
                 % self.fishE.currentBet
             )
+            return LocationType.TAVERN
 
     def changeBet(self, p):
         self.prompt = p

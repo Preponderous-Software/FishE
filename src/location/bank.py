@@ -1,3 +1,6 @@
+from location.enum.locationType import LocationType
+
+
 class Bank:
     def __init__(self, fishE):
         self.fishE = fishE
@@ -20,7 +23,8 @@ class Bank:
                     "How much would you like to deposit? Money: $%d" % self.fishE.money
                 )
             else:
-                self.fishE.locations["bank"].run("You don't have anything to deposit!")
+                self.fishE.currentPrompt = "You don't have any money on you!"
+            return LocationType.BANK
 
         elif self.fishE.input == "2":
             if self.fishE.moneyInBank > 0:
@@ -29,11 +33,13 @@ class Bank:
                     % self.fishE.moneyInBank
                 )
             else:
-                self.fishE.locations["bank"].run("You don't have any money in the bank!")
+                self.fishE.currentPrompt = "You don't have any money in the bank!"
+            return LocationType.BANK
 
         elif self.fishE.input == "3":
             self.fishE.increaseTime()
-            self.fishE.locations["docks"].run("What would you like to do?")
+            self.fishE.currentPrompt = "What would you like to do?"
+            return LocationType.DOCKS
             
     def deposit(self, p):
         self.fishE.prompt = p
@@ -50,10 +56,13 @@ class Bank:
         if self.fishE.amount <= self.fishE.money:
             self.fishE.moneyInBank += self.fishE.amount
             self.fishE.money -= self.fishE.amount
+            
+            self.fishE.currentPrompt = "$%d deposited successfully." % self.fishE.amount
 
-            self.fishE.locations["bank"].run("$%d deposited successfully." % self.fishE.amount)
+            return LocationType.BANK
         else:
-            self.fishE.locations["bank"].run("You don't have that much money on you!")
+            self.fishE.currentPrompt = "You don't have that much money on you!"
+            return LocationType.BANK
 
     def withdraw(self, p):
         self.fishE.prompt = p
@@ -71,6 +80,6 @@ class Bank:
             self.fishE.money += self.fishE.amount
             self.fishE.moneyInBank -= self.fishE.amount
 
-            self.fishE.locations["bank"].run("$%d withdrawn successfully." % self.fishE.amount)
+            self.fishE.currentPrompt = "$%d withdrawn successfully." % self.fishE.amount
         else:
-            self.fishE.locations["bank"].run("You don't have that much money in the bank!")
+            self.fishE.currentPrompt = "You don't have that much money in the bank!"
