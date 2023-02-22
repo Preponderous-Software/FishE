@@ -58,6 +58,7 @@ class Docks:
             sys.stdout.flush()
             time.sleep(0.5)
             self.stats.hoursSpentFishing += 1
+            self.fishE.increaseTime()
 
         fishToAdd = random.randint(1, 10) * self.player.fishMultiplier
         self.player.fishCount += fishToAdd
