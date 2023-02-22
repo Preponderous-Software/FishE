@@ -63,10 +63,10 @@ class Docks:
             self.fishE.increaseTime()
             self.fishE.stats.addHoursSpentFishing(1)
 
-        self.fishE.fishCount = 1 * self.fishE.fishMultiplier
+        self.fishE.fishCount += 1 * self.fishE.fishMultiplier
         self.fishE.stats.addFishCaught(self.fishE.fishCount)
 
         if self.fishE.fishCount == 1:
-            self.fishE.currentPrompt = "Nice catch! Hours taken: %d!" % hours
+            self.fishE.currentPrompt = "Nice catch!" % hours
         else:
             self.fishE.currentPrompt = "You caught %d fish! It only took %d hours!" % (self.fishE.fishCount, hours)
