@@ -1,7 +1,8 @@
 from location import bank, docks, home, shop, tavern
 from location.enum.locationType import LocationType
+from player.player import Player
 from stats.stats import Stats
-from template.textAdventure import Text_Adventure_Template
+from template.textAdventureTemplate import TextAdventureTemplate
 import time
 import random
 import sys
@@ -12,19 +13,14 @@ class FishE:
     def __init__(self):
         self.running = True
         
-        self.template = Text_Adventure_Template()
+        self.template = TextAdventureTemplate()
 
         self.options = []
 
         self.day = 1
         self.time = 8
 
-        self.fishCount = 0
-        self.money = 0
-        self.moneyInBank = 0
-
-        self.fishMultiplier = 1
-
+        self.player = Player()
         self.stats = Stats()
 
         self.currentBet = 0
@@ -62,6 +58,7 @@ class FishE:
                 
             nextLocation = self.locations[self.currentLocation].run(self.currentPrompt)
             self.currentLocation = nextLocation
+            self.increaseTime()
             
 
     def increaseTime(self):
@@ -84,20 +81,22 @@ class FishE:
 
         self.saveGame()
 
-        self.moneyInBank += int(math.ceil(self.moneyInBank * 0.10))
-        self.stats.addMoneyMadeFromInterest(int(math.ceil(self.moneyInBank * 0.10)))
-        self.stats.addMoneyMade(int(math.ceil(self.moneyInBank * 0.10)))
+        moneyToAdd = int(math.ceil(self.player.moneyInBank * 0.10))
+        self.player.moneyInBank += moneyToAdd
+        self.stats.moneyMadeFromInterest += moneyToAdd
+        self.stats.totalMoneyMade += moneyToAdd
+        
+        self.currentLocation = "home"
 
     def saveGame(self):
         self.file = open("savefile.txt", "w")
 
         self.file.write("%d" % self.day)
 
-        self.file.write("\n%d" % self.fishCount)
-        self.file.write("\n%d" % self.money)
-        self.file.write("\n%d" % self.moneyInBank)
-
-        self.file.write("\n%d" % self.fishMultiplier)
+        self.file.write("\n%d" % self.player.fishCount)
+        self.file.write("\n%d" % self.player.money)
+        self.file.write("\n%d" % self.player.moneyInBank)
+        self.file.write("\n%d" % self.player.fishMultiplier)
 
         self.file.write("\n%d" % self.stats.totalFishCaught)
         self.file.write("\n%d" % self.stats.totalMoneyMade)
@@ -109,14 +108,17 @@ class FishE:
     def loadGame(self):
         with open("savefile.txt") as f:
             self.content = f.readlines()
+            
+        if len(self.content) == 0:
+            print("No save file found.")
+            return
 
         self.day = int(self.content[0])
 
-        self.fishCount = int(self.content[1])
-        self.money = int(self.content[2])
-        self.moneyInBank = int(self.content[3])
-
-        self.fishMultiplier = int(self.content[4])
+        self.player.fishCount = int(self.content[1])
+        self.player.money = int(self.content[2])
+        self.player.moneyInBank = int(self.content[3])
+        self.player.fishMultiplier = int(self.content[4])
 
         self.stats.totalFishCaught = int(self.content[5])
         self.stats.totalMoneyMade = int(self.content[6])

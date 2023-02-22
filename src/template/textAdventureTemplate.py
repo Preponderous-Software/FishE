@@ -1,4 +1,4 @@
-class Text_Adventure_Template(object):
+class TextAdventureTemplate:
     def __init__(self):
 
         self.descriptor = "Default descriptor"

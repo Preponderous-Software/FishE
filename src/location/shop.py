@@ -1,12 +1,15 @@
+import random
 from location.enum.locationType import LocationType
 
 
 class Shop:
     def __init__(self, fishE):
         self.fishE = fishE
+        self.player = fishE.player
+        self.stats = fishE.stats
     
-    def run(self, p):
-        prompt = p
+    def run(self, prompt):
+        prompt = prompt
         li = ["Buy/Sell", "Go to Docks"]
         self.fishE.input = self.fishE.template.showOptions(
             "The shopkeeper winks at you as you behold his collection of fishing poles.",
@@ -14,8 +17,8 @@ class Shop:
             li,
             self.fishE.day,
             self.fishE.time,
-            self.fishE.money,
-            self.fishE.fishCount,
+            self.player.money,
+            self.player.fishCount,
         )
 
         if self.fishE.input == "1":
@@ -23,35 +26,35 @@ class Shop:
             return LocationType.SHOP
 
         elif self.fishE.input == "2":
-            self.fishE.increaseTime()
             self.fishE.currentPrompt = "What would you like to do?"
             return LocationType.DOCKS
             
-    def buysell(self, p):
+    def buysell(self, prompt):        
         li = ["Sell Fish", "Buy Better Bait ( $%d )" % self.fishE.priceForBait, "Back"]
         self.fishE.input = self.fishE.template.showOptions(
             "The shopkeeper waits for you to make a decision.",
-            p,
+            prompt,
             li,
             self.fishE.day,
             self.fishE.time,
-            self.fishE.money,
-            self.fishE.fishCount,
+            self.player.money,
+            self.player.fishCount,
         )
 
         if self.fishE.input == "1":
-            self.fishE.money += self.fishE.fishCount * 5
-            self.fishE.stats.addMoneyMade(self.fishE.fishCount * 5)
-            self.fishE.fishCount = 0
+            moneyToAdd = self.player.fishCount * random.randint(3, 5)
+            self.player.money += moneyToAdd
+            self.stats.totalMoneyMade += moneyToAdd
+            self.player.fishCount = 0
 
             self.buysell("You sold all of your fish!")
 
         elif self.fishE.input == "2":
-            if self.fishE.money < self.fishE.priceForBait:
+            if self.player.money < self.fishE.priceForBait:
                 self.buysell("You don't have enough money!")
             else:
-                self.fishE.fishMultiplier += 1
-                self.fishE.money -= self.fishE.priceForBait
+                self.player.fishMultiplier += 1
+                self.player.money -= self.fishE.priceForBait
 
                 self.fishE.priceForBait = self.fishE.priceForBait * 1.25
 
