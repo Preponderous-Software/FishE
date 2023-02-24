@@ -1,3 +1,4 @@
+# @author Daniel McCoy Stephenson
 class TextAdventureTemplate:
     def __init__(self):
 

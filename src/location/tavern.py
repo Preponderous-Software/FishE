@@ -4,23 +4,30 @@ import time
 
 from location.enum.locationType import LocationType
 
+from player.player import Player
+from world.timeService import TimeService
+from stats.stats import Stats
+from template.textAdventureTemplate import TextAdventureTemplate
 
+# @author Daniel McCoy Stephenson
 class Tavern:
-    def __init__(self, fishE):
-        self.fishE = fishE
-        self.player = fishE.player
-        self.stats = fishE.stats
+    def __init__(self, template: TextAdventureTemplate, currentPrompt: str, player: Player, stats: Stats, timeService: TimeService):
+        self.template = template
+        self.currentPrompt = currentPrompt
+        self.player = player
+        self.stats = stats
+        self.timeService = timeService
         
         self.currentBet = 0
     
     def run(self, prompt):        
         li = ["Get drunk ( $10 )", "Gamble", "Go to Docks"]
-        input = self.fishE.template.showOptions(
+        input = self.template.showOptions(
             "You sit at the bar, watching the barkeep clean a mug with a dirty rag.",
             prompt,
             li,
-            self.fishE.day,
-            self.fishE.time,
+            self.timeService.day,
+            self.timeService.time,
             self.player.money,
             self.player.fishCount,
         )
@@ -28,8 +35,9 @@ class Tavern:
         if input == "1":
             if self.player.money >= 10:
                 self.getDrunk()
+                return LocationType.HOME
             else:
-                self.fishE.currentPrompt = "You don't have enough money."
+                self.currentPrompt = "You don't have enough money."
                 return LocationType.TAVERN
 
         elif input == "2":
@@ -39,12 +47,12 @@ class Tavern:
             return LocationType.TAVERN
 
         elif input == "3":
-            self.fishE.currentPrompt = "What would you like to do?"
+            self.currentPrompt = "What would you like to do?"
             return LocationType.DOCKS
             
     def getDrunk(self):        
-        self.fishE.template.lotsOfSpace()
-        self.fishE.template.divider()
+        self.template.lotsOfSpace()
+        self.template.divider()
 
         self.player.money -= 10
 
@@ -55,28 +63,27 @@ class Tavern:
 
         self.stats.timesGottenDrunk += 1
 
-        self.fishE.increaseDay()
-        self.fishE.currentPrompt = "You have a headache."
-        return LocationType.HOME
+        self.timeService.increaseDay()
+        self.currentPrompt = "You have a headache."
         
     def gamble(self, prompt):        
         li = ["1", "2", "3", "4", "5", "6", "Change Bet", "Back"]
-        self.input = int(
-            self.fishE.template.showOptions(
+        input = int(
+            self.template.showOptions(
                 "Once you place your bet, the burly man in front of you will throw the dice.",
                 prompt,
                 li,
-                self.fishE.day,
-                self.fishE.time,
+                self.timeService.day,
+                self.timeService.time,
                 self.player.money,
                 self.player.fishCount,
             )
         )
 
-        if 1 <= self.input <= 6 and self.currentBet > 0:
+        if 1 <= input <= 6 and self.currentBet > 0:
             self.diceThrow = random.randint(1, 6)
 
-            if self.input == self.diceThrow:
+            if input == self.diceThrow:
                 self.player.money += self.currentBet
                 self.stats.moneyMadeFromGambling += self.currentBet
                 self.currentBet = 0
@@ -92,25 +99,23 @@ class Tavern:
                     "The dice rolled a %d! You lost your money! Care to try again? Current Bet: $%d"
                     % (self.diceThrow, self.currentBet)
                 )
-        elif self.input == 7:
+        elif input == 7:
             self.changeBet(
                 "How much money would you like to bet? Money: $%d" % self.player.money
             )
-        elif self.input == 8:
-            self.fishE.currentPrompt = "What would you like to do?"
-            return LocationType.TAVERN
+        elif input == 8:
+            self.currentPrompt = "What would you like to do?"
         else:
             self.gamble(
                 "You didn't bet any money! What will the dice land on? Current Bet: $%d"
                 % self.currentBet
             )
-            return LocationType.TAVERN
 
     def changeBet(self, prompt):        
-        self.fishE.template.lotsOfSpace()
-        self.fishE.template.divider()
+        self.template.lotsOfSpace()
+        self.template.divider()
         print(prompt)
-        self.fishE.template.divider()
+        self.template.divider()
 
         try:
             self.amount = int(input("> "))
@@ -124,5 +129,4 @@ class Tavern:
                 "What will the dice land on? Current Bet: $%d" % self.currentBet
             )
         else:
-            self.fishE.currentPrompt = "You don't have that much money on you! Money: $%d" % self.player.money
-            return LocationType.TAVERN
+            self.currentPrompt = "You don't have that much money on you! Money: $%d" % self.player.money

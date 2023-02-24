@@ -1,3 +1,4 @@
+# @author Daniel McCoy Stephenson
 class Player:
     def __init__(self):
         self.fishCount = 0

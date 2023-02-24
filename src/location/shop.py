@@ -1,64 +1,58 @@
 import random
 from location.enum.locationType import LocationType
+from player.player import Player
+from world.timeService import TimeService
+from stats.stats import Stats
+from template.textAdventureTemplate import TextAdventureTemplate
 
-
+# @author Daniel McCoy Stephenson
 class Shop:
-    def __init__(self, fishE):
-        self.fishE = fishE
-        self.player = fishE.player
-        self.stats = fishE.stats
+    def __init__(self, template: TextAdventureTemplate, currentPrompt: str, player: Player, stats: Stats, timeService: TimeService):
+        self.template = template
+        self.currentPrompt = currentPrompt
+        self.player = player
+        self.stats = stats
+        self.timeService = timeService
+        
+        self.priceForBait = 50
     
     def run(self, prompt):
         prompt = prompt
-        li = ["Buy/Sell", "Go to Docks"]
-        self.fishE.input = self.fishE.template.showOptions(
+        li = ["Sell Fish", "Buy Better Bait ( $%d )" % self.priceForBait, "Go to Docks"]
+        input = self.template.showOptions(
             "The shopkeeper winks at you as you behold his collection of fishing poles.",
             prompt,
             li,
-            self.fishE.day,
-            self.fishE.time,
+            self.timeService.day,
+            self.timeService.time,
             self.player.money,
             self.player.fishCount,
         )
 
-        if self.fishE.input == "1":
-            self.buysell("What would you like to do?")
+        if input == "1":
+            self.sellFish()
             return LocationType.SHOP
-
-        elif self.fishE.input == "2":
-            self.fishE.currentPrompt = "What would you like to do?"
+        elif input == "2":
+            self.buyBetterBait()
+            return LocationType.SHOP
+        elif input == "3":
+            self.currentPrompt = "What would you like to do?"
             return LocationType.DOCKS
-            
-    def buysell(self, prompt):        
-        li = ["Sell Fish", "Buy Better Bait ( $%d )" % self.fishE.priceForBait, "Back"]
-        self.fishE.input = self.fishE.template.showOptions(
-            "The shopkeeper waits for you to make a decision.",
-            prompt,
-            li,
-            self.fishE.day,
-            self.fishE.time,
-            self.player.money,
-            self.player.fishCount,
-        )
 
-        if self.fishE.input == "1":
-            moneyToAdd = self.player.fishCount * random.randint(3, 5)
-            self.player.money += moneyToAdd
-            self.stats.totalMoneyMade += moneyToAdd
-            self.player.fishCount = 0
+    def sellFish(self):
+        moneyToAdd = self.player.fishCount * random.randint(3, 5)
+        self.player.money += moneyToAdd
+        self.stats.totalMoneyMade += moneyToAdd
+        self.player.fishCount = 0
 
-            self.buysell("You sold all of your fish!")
+        self.currentPrompt = "You sold all of your fish!"
 
-        elif self.fishE.input == "2":
-            if self.player.money < self.fishE.priceForBait:
-                self.buysell("You don't have enough money!")
-            else:
-                self.player.fishMultiplier += 1
-                self.player.money -= self.fishE.priceForBait
+    def buyBetterBait(self):
+        if self.player.money < self.priceForBait:
+            self.currentPrompt = "You don't have enough money!"
+        else:
+            self.player.fishMultiplier += 1
+            self.player.money -= self.priceForBait
 
-                self.fishE.priceForBait = self.fishE.priceForBait * 1.25
-
-                self.buysell("You bought some better bait!")
-
-        elif self.fishE.input == "3":
-            self.fishE.currentPrompt = "What would you like to do?"
+            self.priceForBait = self.priceForBait * 1.25
+            self.currentPrompt = "You bought some better bait!"

@@ -1,2 +1,4 @@
 *.pyc
 savefile.txt
+.coverage
+cov.xml
