@@ -1,51 +1,57 @@
+from pstats import Stats
 from location.enum.locationType import LocationType
+from player.player import Player
+from world.timeService import TimeService
+from template.textAdventureTemplate import TextAdventureTemplate
 
-
+# @author Daniel McCoy Stephenson
 class Bank:
-    def __init__(self, fishE):
-        self.fishE = fishE
-        self.player = fishE.player
-        self.stats = fishE.stats
-    
+    def __init__(self, template: TextAdventureTemplate, currentPrompt: str, player: Player, stats: Stats, timeService: TimeService):
+        self.template = template
+        self.currentPrompt = currentPrompt
+        self.player = player
+        self.stats = stats
+        self.timeService = timeService
+
     def run(self, prompt):
         li = ["Make a Deposit", "Make a Withdrawal", "Go to docks"]
-        self.fishE.input = self.fishE.template.showOptions(
+        input = self.template.showOptions(
             "You're at the front of the line and the teller asks you what you want to do.",
             prompt,
             li,
-            self.fishE.day,
-            self.fishE.time,
+            self.timeService.time,
+            self.timeService.day,
             self.player.money,
             self.player.fishCount,
         )
 
-        if self.fishE.input == "1":
+        if input == "1":
             if self.player.money > 0:
                 self.deposit(
                     "How much would you like to deposit? Money: $%d" % self.player.money
                 )
             else:
-                self.fishE.currentPrompt = "You don't have any money on you!"
+                self.currentPrompt = "You don't have any money on you!"
             return LocationType.BANK
 
-        elif self.fishE.input == "2":
+        elif input == "2":
             if self.player.moneyInBank > 0:
                 self.withdraw(
                     "How much would you like to withdraw? Money In Bank: $%d" % self.player.moneyInBank
                 )
             else:
-                self.fishE.currentPrompt = "You don't have any money in the bank!"
+                self.currentPrompt = "You don't have any money in the bank!"
             return LocationType.BANK
 
-        elif self.fishE.input == "3":
-            self.fishE.currentPrompt = "What would you like to do?"
+        elif input == "3":
+            self.currentPrompt = "What would you like to do?"
             return LocationType.DOCKS
             
     def deposit(self, prompt):
-        self.fishE.template.lotsOfSpace()
-        self.fishE.template.divider()
+        self.template.lotsOfSpace()
+        self.template.divider()
         print(prompt)
-        self.fishE.template.divider()
+        self.template.divider()
 
         try:
             amount = int(input("> "))
@@ -56,17 +62,15 @@ class Bank:
             self.player.moneyInBank += amount
             self.player.money -= amount
             
-            self.fishE.currentPrompt = "$%d deposited successfully." % amount
+            self.currentPrompt = "$%d deposited successfully." % amount
         else:
-            self.fishE.currentPrompt = "You don't have that much money on you!"
-            
-        return LocationType.BANK
+            self.currentPrompt = "You don't have that much money on you!"
 
     def withdraw(self, prompt):
-        self.fishE.template.lotsOfSpace()
-        self.fishE.template.divider()
+        self.template.lotsOfSpace()
+        self.template.divider()
         print(prompt)
-        self.fishE.template.divider()
+        self.template.divider()
 
         try:
             amount = int(input("> "))
@@ -77,6 +81,6 @@ class Bank:
             self.player.money += amount
             self.player.moneyInBank -= amount
 
-            self.fishE.currentPrompt = "$%d withdrawn successfully." % amount
+            self.currentPrompt = "$%d withdrawn successfully." % amount
         else:
-            self.fishE.currentPrompt = "You don't have that much money in the bank!"
+            self.currentPrompt = "You don't have that much money in the bank!"
