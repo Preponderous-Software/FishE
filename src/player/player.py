@@ -2,6 +2,6 @@
 class Player:
     def __init__(self):
         self.fishCount = 0
-        self.money = 0
-        self.moneyInBank = 0
+        self.money = 20
+        self.moneyInBank = 0.01
         self.fishMultiplier = 1

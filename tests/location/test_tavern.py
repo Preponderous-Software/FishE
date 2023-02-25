@@ -63,7 +63,7 @@ def test_run_gamble_action_success():
     # prepare
     tavernInstance = createTavern()
     tavernInstance.userInterface.showOptions = MagicMock(return_value="2")
-    tavernInstance.gamble = MagicMock()
+    tavernInstance.gamble = MagicMock(return_value=LocationType.TAVERN)
     tavernInstance.player.money = 10
 
     # call
@@ -106,9 +106,22 @@ def test_getDrunk():
     tavernInstance.timeService.increaseDay.assert_called_once()
 
 
-# def test_gamble():
-#     # TODO: implement
-#     assert(False)
+# def test_gamble_throw_dice_win():
+#     # prepare
+#     tavernInstance = createTavern()
+#     tavernInstance.player.money = 10
+#     tavernInstance.currentBet = 10
+#     tavernInstance.userInterface.showOptions = MagicMock(return_value="1")
+#     tavern.random.randint = MagicMock(return_value=1)
+
+#     # call
+#     tavernInstance.gamble()
+    
+#     # check
+#     assert tavernInstance.player.money == 20
+#     assert tavernInstance.stats.totalMoneyMade == 10
+#     assert tavernInstance.currentBet == 0
+    
 
 # def test_changeBet():
 #     # TODO: implement
