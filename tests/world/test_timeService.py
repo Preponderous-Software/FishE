@@ -2,20 +2,23 @@ from src.player.player import Player
 from src.stats.stats import Stats
 from src.world.timeService import TimeService
 
+
 def createTimeService():
     player = Player()
     stats = Stats()
     return TimeService(player, stats)
 
+
 def test_initialization():
     # call
     timeService = createTimeService()
-    
+
     # check
     expected_day = 1
     expected_time = 8
     assert timeService.day == expected_day
     assert timeService.time == expected_time
+
 
 def test_increaseTime():
     # prepare
@@ -23,12 +26,13 @@ def test_increaseTime():
 
     # call
     timeService.increaseTime()
-    
+
     # check
     expected_day = 1
     expected_time = 9
     assert timeService.day == expected_day
     assert timeService.time == expected_time
+
 
 def test_increaseTimeToNextDay():
     # prepare
@@ -37,12 +41,13 @@ def test_increaseTimeToNextDay():
 
     # call
     timeService.increaseTime()
-    
+
     # check
     expected_day = 2
     expected_time = 8
     assert timeService.day == expected_day
     assert timeService.time == expected_time
+
 
 def test_increaseDay():
     # prepare
@@ -53,7 +58,7 @@ def test_increaseDay():
 
     # call
     timeService.increaseDay()
-    
+
     # check
     expected_day = 2
     expected_time = 8
