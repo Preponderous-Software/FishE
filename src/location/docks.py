@@ -4,29 +4,32 @@ import time
 
 from location.enum.locationType import LocationType
 from player.player import Player
+from prompt.prompt import Prompt
 from world.timeService import TimeService
 from stats.stats import Stats
-from template.textAdventureTemplate import TextAdventureTemplate
+from ui.userInterface import UserInterface
+
 
 # @author Daniel McCoy Stephenson
 class Docks:
-    def __init__(self, template: TextAdventureTemplate, currentPrompt: str, player: Player, stats: Stats, timeService: TimeService):
-        self.template = template
+    def __init__(
+        self,
+        userInterface: UserInterface,
+        currentPrompt: Prompt,
+        player: Player,
+        stats: Stats,
+        timeService: TimeService,
+    ):
+        self.userInterface = userInterface
         self.currentPrompt = currentPrompt
         self.player = player
         self.stats = stats
         self.timeService = timeService
-        
-    def run(self, prompt):
+
+    def run(self):
         li = ["Fish", "Go Home", "Go to Shop", "Go to Tavern", "Go to Bank"]
-        input = self.template.showOptions(
-            "You breathe in the fresh air. Salty.",
-            prompt,
-            li,
-            self.timeService.day,
-            self.timeService.time,
-            self.player.money,
-            self.player.fishCount,
+        input = self.userInterface.showOptions(
+            "You breathe in the fresh air. Salty.", li
         )
 
         if input == "1":
@@ -34,24 +37,27 @@ class Docks:
             return LocationType.DOCKS
 
         elif input == "2":
-            self.currentPrompt = "What would you like to do?"
+            self.currentPrompt.text = "What would you like to do?"
             return LocationType.HOME
 
         elif input == "3":
-            self.currentPrompt = "What would you like to do?"
+            self.currentPrompt.text = "What would you like to do?"
             return LocationType.SHOP
 
         elif input == "4":
-            self.currentPrompt = "What would you like to do?"
+            self.currentPrompt.text = "What would you like to do?"
             return LocationType.TAVERN
 
         elif input == "5":
-            self.currentPrompt = "What would you like to do? Money in Bank: $%d" % self.player.moneyInBank
+            self.currentPrompt.text = (
+                "What would you like to do? Money in Bank: $%d"
+                % self.player.moneyInBank
+            )
             return LocationType.BANK
-            
+
     def fish(self):
-        self.template.lotsOfSpace()
-        self.template.divider()
+        self.userInterface.lotsOfSpace()
+        self.userInterface.divider()
 
         print("Fishing... "),
         sys.stdout.flush()
@@ -71,6 +77,9 @@ class Docks:
         self.stats.totalFishCaught += fishToAdd
 
         if fishToAdd == 1:
-            self.currentPrompt = "Nice catch!"
+            self.currentPrompt.text = "Nice catch!"
         else:
-            self.currentPrompt = "You caught %d fish! It only took %d hours!" % (fishToAdd, hours)
+            self.currentPrompt.text = "You caught %d fish! It only took %d hours!" % (
+                fishToAdd,
+                hours,
+            )

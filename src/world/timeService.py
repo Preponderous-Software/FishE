@@ -1,11 +1,12 @@
 import math
 
+
 # @author Daniel McCoy Stephenson
 class TimeService:
     def __init__(self, player, stats):
         self.player = player
         self.stats = stats
-        
+
         self.day = 1
         self.time = 8
 
