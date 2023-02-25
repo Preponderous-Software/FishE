@@ -11,6 +11,6 @@ def test_initialization():
 
     # check
     assert player.fishCount == 0
-    assert player.money == 0
-    assert player.moneyInBank == 0
+    assert player.money == 20
+    assert player.moneyInBank == 0.01
     assert player.fishMultiplier == 1

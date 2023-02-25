@@ -48,6 +48,7 @@ def test_run_make_deposit_failure_no_money():
     # prepare
     bankInstance = createBank()
     bankInstance.userInterface.showOptions = MagicMock(return_value="1")
+    bankInstance.player.money = 0
     bankInstance.deposit = MagicMock()
 
     # call
@@ -77,6 +78,7 @@ def test_run_make_withdrawal_failure_no_money():
     # prepare
     bankInstance = createBank()
     bankInstance.userInterface.showOptions = MagicMock(return_value="2")
+    bankInstance.player.moneyInBank = 0
     bankInstance.withdraw = MagicMock()
 
     # call
@@ -105,6 +107,7 @@ def test_deposit_success():
     bankInstance.userInterface.lotsOfSpace = MagicMock()
     bankInstance.userInterface.divider = MagicMock()
     bankInstance.player.money = 100
+    bankInstance.player.moneyInBank = 0
     bank.print = MagicMock()
     bank.input = MagicMock(return_value="10")
 
@@ -123,6 +126,7 @@ def test_deposit_failure_not_enough_money():
     bankInstance.userInterface.lotsOfSpace = MagicMock()
     bankInstance.userInterface.divider = MagicMock()
     bankInstance.player.money = 5
+    bankInstance.player.moneyInBank = 0
     bank.print = MagicMock()
     bank.input = MagicMock(return_value="10")
 
@@ -141,6 +145,7 @@ def test_withdraw_success():
     bankInstance.userInterface.lotsOfSpace = MagicMock()
     bankInstance.userInterface.divider = MagicMock()
     bankInstance.player.moneyInBank = 100
+    bankInstance.player.money = 0
     bank.print = MagicMock()
     bank.input = MagicMock(return_value="10")
 
@@ -159,6 +164,7 @@ def test_withdraw_failure_not_enough_money():
     bankInstance.userInterface.lotsOfSpace = MagicMock()
     bankInstance.userInterface.divider = MagicMock()
     bankInstance.player.moneyInBank = 5
+    bankInstance.player.money = 0
     bank.print = MagicMock()
     bank.input = MagicMock(return_value="10")
 
