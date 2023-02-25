@@ -84,7 +84,7 @@ class Tavern:
 
             if input == self.diceThrow:
                 self.player.money += self.currentBet
-                self.stats.moneyMadeFromGambling += self.currentBet
+                self.stats.totalMoneyMade += self.currentBet
                 self.currentBet = 0
                 self.gamble(
                     "You guessed correctly! Care to try again? Current Bet: $%d"
