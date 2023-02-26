@@ -1,7 +1,10 @@
+import json
+import os
 from location import bank, docks, home, shop, tavern
 from location.enum.locationType import LocationType
 from player.player import Player
 from prompt.prompt import Prompt
+from player.playerJsonReaderWriter import PlayerJsonReaderWriter
 from world.timeService import TimeService
 from stats.stats import Stats
 from ui.userInterface import UserInterface
@@ -12,7 +15,18 @@ class FishE:
     def __init__(self):
         self.running = True
 
-        self.player = Player()
+        self.playerJsonReaderWriter = PlayerJsonReaderWriter()
+
+        # if save file exists, load it
+        if os.path.exists("data/player.json"):
+            playerSaveFile = open("data/player.json", "r")
+            self.player = self.playerJsonReaderWriter.readPlayerFromFile(
+                playerSaveFile
+            )
+            playerSaveFile.close()
+        else:
+            self.player = Player()
+
         self.stats = Stats()
 
         self.timeService = TimeService(self.player, self.stats)
@@ -73,7 +87,26 @@ class FishE:
 
             # increase time & save
             self.timeService.increaseTime()
+            self.save()
 
+    def save(self):
+        # create data directory
+        if not os.path.exists("data"):
+            os.makedirs("data")
+
+        playerSaveFile = open("data/player.json", "w")
+        self.playerJsonReaderWriter.writePlayerToFile(self.player, playerSaveFile)
+    
+    def load(self):
+        if not os.path.exists("data"):
+            os.makedirs("data")
+        
+        if not os.path.exists("data/player.json"):
+            return
+    
+        playerSaveFile = open("data/player.json", "r")
+        self.player = self.playerJsonReaderWriter.readPlayerFromFile(playerSaveFile)
+        
 
 if __name__ == "__main__":
     FishE = FishE()

@@ -6,15 +6,15 @@
             "minimum": 0
         },
         "money": {
-            "type": "decimal",
+            "type": "number",
             "minimum": 0
         },
         "moneyInBank": {
-            "type": "decimal",
+            "type": "number",
             "minimum": 0
         },
         "fishMultiplier": {
-            "type": "decimal",
+            "type": "number",
             "minimum": 0
         }
     },
