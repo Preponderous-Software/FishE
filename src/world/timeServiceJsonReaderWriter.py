@@ -1,4 +1,5 @@
 import json
+import os
 from world.timeService import TimeService
 
 class TimeServiceJsonReaderWriter:
@@ -19,6 +20,6 @@ class TimeServiceJsonReaderWriter:
             timeServiceJson = self.createJsonFromTimeService(timeService)
             json.dump(timeServiceJson, jsonFile)
         
-        def readTimeServiceFromFile(self, jsonFile):
+        def readTimeServiceFromFile(self, jsonFile, player, stats):            
             timeServiceJson = json.load(jsonFile)
-            return self.createTimeServiceFromJson(timeServiceJson)
+            return self.createTimeServiceFromJson(timeServiceJson, player, stats)

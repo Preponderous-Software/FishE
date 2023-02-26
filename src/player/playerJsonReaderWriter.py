@@ -23,6 +23,6 @@ class PlayerJsonReaderWriter:
         playerJson = self.createJsonFromPlayer(player)
         json.dump(playerJson, jsonFile)
     
-    def readPlayerFromFile(self, jsonFile):
+    def readPlayerFromFile(self, jsonFile):        
         playerJson = json.load(jsonFile)
         return self.createPlayerFromJson(playerJson)
