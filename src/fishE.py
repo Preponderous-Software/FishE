@@ -5,6 +5,7 @@ from location.enum.locationType import LocationType
 from player.player import Player
 from prompt.prompt import Prompt
 from player.playerJsonReaderWriter import PlayerJsonReaderWriter
+from world.timeServiceJsonReaderWriter import TimeServiceJsonReaderWriter
 from world.timeService import TimeService
 from stats.stats import Stats
 from ui.userInterface import UserInterface
@@ -16,6 +17,7 @@ class FishE:
         self.running = True
 
         self.playerJsonReaderWriter = PlayerJsonReaderWriter()
+        self.timeServiceJsonReaderWriter = TimeServiceJsonReaderWriter()
 
         # if save file exists, load it
         if os.path.exists("data/player.json"):
@@ -29,7 +31,15 @@ class FishE:
 
         self.stats = Stats()
 
-        self.timeService = TimeService(self.player, self.stats)
+        # if save file exists, load it
+        if os.path.exists("data/timeService.json"):
+            timeServiceSaveFile = open("data/timeService.json", "r")
+            self.timeService = self.timeServiceJsonReaderWriter.createTimeServiceFromJson(
+                json.load(timeServiceSaveFile), self.player, self.stats
+            )
+            timeServiceSaveFile.close()
+        else:
+            self.timeService = TimeService(self.player, self.stats)
 
         self.prompt = Prompt("What would you like to do?")
 
@@ -96,6 +106,9 @@ class FishE:
 
         playerSaveFile = open("data/player.json", "w")
         self.playerJsonReaderWriter.writePlayerToFile(self.player, playerSaveFile)
+
+        timeServiceSaveFile = open("data/timeService.json", "w")
+        self.timeServiceJsonReaderWriter.writeTimeServiceToFile(self.timeService, timeServiceSaveFile)
     
     def load(self):
         if not os.path.exists("data"):
@@ -106,6 +119,9 @@ class FishE:
     
         playerSaveFile = open("data/player.json", "r")
         self.player = self.playerJsonReaderWriter.readPlayerFromFile(playerSaveFile)
+
+        timeServiceSaveFile = open("data/timeService.json", "r")
+        self.timeService = self.timeServiceJsonReaderWriter.readTimeServiceFromFile(timeServiceSaveFile, self.player, self.stats)
         
 
 if __name__ == "__main__":
