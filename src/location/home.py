@@ -53,5 +53,5 @@ class Home:
         print("Money Made From Interest: %d" % self.stats.moneyMadeFromInterest)
         print("Times Gotten Drunk: %d" % self.stats.timesGottenDrunk)
         print("Money Lost Gambling: %d" % self.stats.moneyLostFromGambling)
-        self.userInterface.lotsOfSpace()
+        print("")
         input(" [ CONTINUE ]")
