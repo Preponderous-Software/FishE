@@ -105,6 +105,6 @@ def test_displayStats():
     homeInstance.displayStats()
 
     # check
-    assert homeInstance.userInterface.lotsOfSpace.call_count == 2
-    assert home.print.call_count == 6
+    assert homeInstance.userInterface.lotsOfSpace.call_count == 1
+    assert home.print.call_count == 7
     assert home.input.call_count == 1
