@@ -1,0 +1,14 @@
+{
+    "type": "object",
+    "properties": {
+        "day": {
+            "type": "number",
+            "minimum": 1
+        },
+        "time": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 23
+        }
+    }
+}
