@@ -13,6 +13,12 @@ def createFishE():
     fishE.home.Home = MagicMock()
     fishE.docks.Docks = MagicMock()
     fishE.tavern.Tavern = MagicMock()
+    fishE.PlayerJsonReaderWriter = MagicMock()
+    fishE.TimeServiceJsonReaderWriter = MagicMock()
+    fishE.StatsJsonReaderWriter = MagicMock()
+    fishE.loadPlayer = MagicMock()
+    fishE.loadStats = MagicMock()
+    fishE.loadTimeService = MagicMock()
     return fishE.FishE()
 
 
@@ -22,14 +28,16 @@ def test_initialization():
 
     # check
     assert fishEInstance.running == True
-    fishE.Player.assert_called_once()
-    fishE.Stats.assert_called_once()
-    fishE.TimeService.assert_called_once()
+    assert fishE.Player.call_count == 1 or fishEInstance.playerJsonReaderWriter.readPlayerFromFile.call_count == 1
+    assert fishE.TimeService.call_count == 1 or fishEInstance.timeServiceJsonReaderWriter.readTimeServiceFromFile.call_count == 1
+    assert fishE.Stats.call_count == 1 or fishEInstance.statsJsonReaderWriter.readStatsFromFile.call_count == 1
     fishE.Prompt.assert_called_once()
     fishE.UserInterface.assert_called_once()
     fishE.bank.Bank.assert_called_once()
     fishE.shop.Shop.assert_called_once()
-    fishE.shop.Shop.assert_called_once()
     fishE.home.Home.assert_called_once()
     fishE.docks.Docks.assert_called_once()
     fishE.tavern.Tavern.assert_called_once()
+    fishE.PlayerJsonReaderWriter.assert_called_once()
+    fishE.TimeServiceJsonReaderWriter.assert_called_once()
+    fishE.StatsJsonReaderWriter.assert_called_once()

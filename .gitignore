@@ -1,4 +1,4 @@
 *.pyc
-savefile.txt
+data/*.json
 .coverage
 cov.xml
