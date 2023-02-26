@@ -1,15 +1,15 @@
 import json
 from player.player import Player
 
+
 class PlayerJsonReaderWriter:
-    
     def createJsonFromPlayer(self, player):
         return {
             "fishCount": player.fishCount,
             "fishMultiplier": player.fishMultiplier,
             "money": player.money,
             "moneyInBank": player.moneyInBank,
-            "priceForBait": player.priceForBait
+            "priceForBait": player.priceForBait,
         }
 
     def createPlayerFromJson(self, playerJson):
@@ -24,7 +24,7 @@ class PlayerJsonReaderWriter:
     def writePlayerToFile(self, player, jsonFile):
         playerJson = self.createJsonFromPlayer(player)
         json.dump(playerJson, jsonFile)
-    
-    def readPlayerFromFile(self, jsonFile):        
+
+    def readPlayerFromFile(self, jsonFile):
         playerJson = json.load(jsonFile)
         return self.createPlayerFromJson(playerJson)

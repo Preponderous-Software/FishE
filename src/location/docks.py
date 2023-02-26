@@ -50,7 +50,7 @@ class Docks:
 
         elif input == "5":
             self.currentPrompt.text = (
-                "What would you like to do? Money in Bank: $%d"
+                "What would you like to do? Money in Bank: $%.2f"
                 % self.player.moneyInBank
             )
             return LocationType.BANK

@@ -31,19 +31,22 @@ class Bank:
 
         if input == "1":
             if self.player.money > 0:
-                self.deposit(
-                    "How much would you like to deposit? Money: $%d" % self.player.money
+                self.currentPrompt.text = (
+                    "How much would you like to deposit? Money: $%.2f"
+                    % self.player.money
                 )
+                self.deposit()
             else:
                 self.currentPrompt.text = "You don't have any money on you!"
             return LocationType.BANK
 
         elif input == "2":
             if self.player.moneyInBank > 0:
-                self.withdraw(
-                    "How much would you like to withdraw? Money In Bank: $%d"
+                self.currentPrompt.text = (
+                    "How much would you like to withdraw? Money In Bank: $%.2f"
                     % self.player.moneyInBank
                 )
+                self.withdraw()
             else:
                 self.currentPrompt.text = "You don't have any money in the bank!"
             return LocationType.BANK
@@ -52,40 +55,48 @@ class Bank:
             self.currentPrompt.text = "What would you like to do?"
             return LocationType.DOCKS
 
-    def deposit(self, prompt):
-        self.userInterface.lotsOfSpace()
-        self.userInterface.divider()
-        print(prompt)
-        self.userInterface.divider()
+    def deposit(self):
+        while True:
+            self.userInterface.lotsOfSpace()
+            self.userInterface.divider()
+            print(self.currentPrompt.text)
+            self.userInterface.divider()
 
-        try:
-            amount = int(input("> "))
-        except ValueError:
-            self.deposit("Try again. Money: $%d" % self.player.money)
+            try:
+                amount = int(input("> "))
+            except ValueError:
+                self.currentPrompt.text = "Try again. Money: $%d" % self.player.money
+                continue
 
-        if amount <= self.player.money:
-            self.player.moneyInBank += amount
-            self.player.money -= amount
+            if amount <= self.player.money:
+                self.player.moneyInBank += amount
+                self.player.money -= amount
 
-            self.currentPrompt.text = "$%d deposited successfully." % amount
-        else:
-            self.currentPrompt.text = "You don't have that much money on you!"
+                self.currentPrompt.text = "$%d deposited successfully." % amount
+            else:
+                self.currentPrompt.text = "You don't have that much money on you!"
+            break
 
-    def withdraw(self, prompt):
-        self.userInterface.lotsOfSpace()
-        self.userInterface.divider()
-        print(prompt)
-        self.userInterface.divider()
+    def withdraw(self):
+        while True:
+            self.userInterface.lotsOfSpace()
+            self.userInterface.divider()
+            print(self.currentPrompt.text)
+            self.userInterface.divider()
 
-        try:
-            amount = int(input("> "))
-        except ValueError:
-            self.withdraw("Try again. Money In Bank: $%d" % self.player.moneyInBank)
+            try:
+                amount = int(input("> "))
+            except ValueError:
+                self.currentPrompt.text = (
+                    "Try again. Money In Bank: $%d" % self.player.moneyInBank
+                )
+                continue
 
-        if amount <= self.player.moneyInBank:
-            self.player.money += amount
-            self.player.moneyInBank -= amount
+            if amount <= self.player.moneyInBank:
+                self.player.money += amount
+                self.player.moneyInBank -= amount
 
-            self.currentPrompt.text = "$%d withdrawn successfully." % amount
-        else:
-            self.currentPrompt.text = "You don't have that much money in the bank!"
+                self.currentPrompt.text = "$%d withdrawn successfully." % amount
+            else:
+                self.currentPrompt.text = "You don't have that much money in the bank!"
+            break

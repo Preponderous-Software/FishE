@@ -112,7 +112,7 @@ def test_deposit_success():
     bank.input = MagicMock(return_value="10")
 
     # call
-    bankInstance.deposit("How much?")
+    bankInstance.deposit()
 
     # check
     bank.print.assert_called_once()
@@ -131,7 +131,7 @@ def test_deposit_failure_not_enough_money():
     bank.input = MagicMock(return_value="10")
 
     # call
-    bankInstance.deposit("How much?")
+    bankInstance.deposit()
 
     # check
     bank.print.assert_called_once()
@@ -150,7 +150,7 @@ def test_withdraw_success():
     bank.input = MagicMock(return_value="10")
 
     # call
-    bankInstance.withdraw("How much?")
+    bankInstance.withdraw()
 
     # check
     bank.print.assert_called_once()
@@ -169,7 +169,7 @@ def test_withdraw_failure_not_enough_money():
     bank.input = MagicMock(return_value="10")
 
     # call
-    bankInstance.withdraw("How much?")
+    bankInstance.withdraw()
 
     # check
     bank.print.assert_called_once()

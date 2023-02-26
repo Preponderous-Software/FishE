@@ -71,44 +71,48 @@ class Tavern:
         self.currentPrompt.text = "You have a headache."
 
     def gamble(self):
-        li = ["1", "2", "3", "4", "5", "6", "Change Bet", "Back"]
-        input = int(
-            self.userInterface.showOptions(
-                "Once you place your bet, the burly man in front of you will throw the dice.",
-                li,
-            )
-        )
-
-        if 1 <= input <= 6 and self.currentBet > 0:
-            self.diceThrow = random.randint(1, 6)
-
-            if input == self.diceThrow:
-                self.player.money += self.currentBet
-                self.stats.totalMoneyMade += self.currentBet
-                self.currentBet = 0
-                self.gamble(
-                    "You guessed correctly! Care to try again? Current Bet: $%d"
-                    % self.currentBet
+        while True:
+            li = ["1", "2", "3", "4", "5", "6", "Change Bet", "Back"]
+            input = int(
+                self.userInterface.showOptions(
+                    "Once you place your bet, the burly man in front of you will throw the dice.",
+                    li,
                 )
+            )
+
+            if 1 <= input <= 6 and self.currentBet > 0:
+                self.diceThrow = random.randint(1, 6)
+
+                if input == self.diceThrow:
+                    self.player.money += self.currentBet
+                    self.stats.totalMoneyMade += self.currentBet
+                    self.currentBet = 0
+                    self.currentPrompt.text = (
+                        "The dice rolled a %d! You won $%d! Care to try again? Current Bet: $%d"
+                        % (self.diceThrow, self.currentBet, self.currentBet)
+                    )
+                    continue
+                else:
+                    self.player.money -= self.currentBet
+                    self.stats.moneyLostFromGambling += self.currentBet
+                    self.currentBet = 0
+                    self.currentPrompt.text = (
+                        "The dice rolled a %d! You lost your money! Care to try again? Current Bet: $%d"
+                        % (self.diceThrow, self.currentBet)
+                    )
+                    continue
+            elif input == 7:
+                self.changeBet(
+                    "How much money would you like to bet? Money: $%d"
+                    % self.player.money
+                )
+                continue
+            elif input == 8:
+                self.currentPrompt.text = "What would you like to do?"
+                break
             else:
-                self.player.money -= self.currentBet
-                self.stats.moneyLostFromGambling += self.currentBet
-                self.currentBet = 0
-                self.gamble(
-                    "The dice rolled a %d! You lost your money! Care to try again? Current Bet: $%d"
-                    % (self.diceThrow, self.currentBet)
-                )
-        elif input == 7:
-            self.changeBet(
-                "How much money would you like to bet? Money: $%d" % self.player.money
-            )
-        elif input == 8:
-            self.currentPrompt.text = "What would you like to do?"
-        else:
-            self.gamble(
-                "You didn't bet any money! What will the dice land on? Current Bet: $%d"
-                % self.currentBet
-            )
+                self.currentPrompt.text = "You didn't bet any money!"
+                continue
 
     def changeBet(self, prompt):
         self.userInterface.lotsOfSpace()
@@ -124,9 +128,10 @@ class Tavern:
         if self.amount <= self.player.money:
             self.currentBet = self.amount
 
-            self.gamble(
+            self.currentPrompt.text = (
                 "What will the dice land on? Current Bet: $%d" % self.currentBet
             )
+            self.gamble()
         else:
             self.currentPrompt.text = (
                 "You don't have that much money on you! Money: $%d" % self.player.money

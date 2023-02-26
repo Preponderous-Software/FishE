@@ -1,4 +1,3 @@
-import json
 import os
 from location import bank, docks, home, shop, tavern
 from location.enum.locationType import LocationType
@@ -22,7 +21,10 @@ class FishE:
         self.statsJsonReaderWriter = StatsJsonReaderWriter()
 
         # if save file exists, load it
-        if os.path.exists("data/player.json") and os.path.getsize("data/player.json") > 0:
+        if (
+            os.path.exists("data/player.json")
+            and os.path.getsize("data/player.json") > 0
+        ):
             self.loadPlayer()
         else:
             self.player = Player()
@@ -34,7 +36,10 @@ class FishE:
             self.stats = Stats()
 
         # if save file exists, load it
-        if os.path.exists("data/timeService.json") and os.path.getsize("data/timeService.json") > 0:
+        if (
+            os.path.exists("data/timeService.json")
+            and os.path.getsize("data/timeService.json") > 0
+        ):
             self.loadTimeService()
         else:
             self.timeService = TimeService(self.player, self.stats)
@@ -106,26 +111,30 @@ class FishE:
         self.playerJsonReaderWriter.writePlayerToFile(self.player, playerSaveFile)
 
         timeServiceSaveFile = open("data/timeService.json", "w")
-        self.timeServiceJsonReaderWriter.writeTimeServiceToFile(self.timeService, timeServiceSaveFile)
+        self.timeServiceJsonReaderWriter.writeTimeServiceToFile(
+            self.timeService, timeServiceSaveFile
+        )
 
         statsSaveFile = open("data/stats.json", "w")
         self.statsJsonReaderWriter.writeStatsToFile(self.stats, statsSaveFile)
-    
+
     def loadPlayer(self):
         playerSaveFile = open("data/player.json", "r")
         self.player = self.playerJsonReaderWriter.readPlayerFromFile(playerSaveFile)
         playerSaveFile.close()
-    
+
     def loadStats(self):
         statsSaveFile = open("data/stats.json", "r")
         self.stats = self.statsJsonReaderWriter.readStatsFromFile(statsSaveFile)
         statsSaveFile.close()
-    
+
     def loadTimeService(self):
         timeServiceSaveFile = open("data/timeService.json", "r")
-        self.timeService = self.timeServiceJsonReaderWriter.readTimeServiceFromFile(timeServiceSaveFile, self.player, self.stats)
+        self.timeService = self.timeServiceJsonReaderWriter.readTimeServiceFromFile(
+            timeServiceSaveFile, self.player, self.stats
+        )
         timeServiceSaveFile.close()
-        
+
 
 if __name__ == "__main__":
     FishE = FishE()

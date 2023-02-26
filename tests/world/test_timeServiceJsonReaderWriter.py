@@ -5,22 +5,27 @@ from src.world.timeService import TimeService
 import json
 from jsonschema import validate
 
+
 def createTimeServiceJsonReaderWriter():
     return timeServiceJsonReaderWriter.TimeServiceJsonReaderWriter()
+
 
 def createTimeService():
     player = Player()
     stats = Stats()
     return TimeService(player, stats)
 
+
 def getTimeServiceSchema():
     # load json from file
-    with open('schemas/timeService.json') as json_file:
+    with open("schemas/timeService.json") as json_file:
         return json.load(json_file)
+
 
 def test_initialization():
     timeServiceJsonReaderWriter = createTimeServiceJsonReaderWriter()
     assert timeServiceJsonReaderWriter != None
+
 
 def test_createJsonFromTimeService():
     timeServiceJsonReaderWriter = createTimeServiceJsonReaderWriter()
@@ -32,12 +37,10 @@ def test_createJsonFromTimeService():
     timeServiceSchema = getTimeServiceSchema()
     validate(timeServiceJson, timeServiceSchema)
 
+
 def test_createTimeServiceFromJson():
     timeServiceJsonReaderWriter = createTimeServiceJsonReaderWriter()
-    timeServiceJson = {
-        "time": 8,
-        "day": 1
-    }
+    timeServiceJson = {"time": 8, "day": 1}
 
     # validate
     timeServiceSchema = getTimeServiceSchema()
@@ -45,5 +48,7 @@ def test_createTimeServiceFromJson():
 
     player = Player()
     stats = Stats()
-    timeServiceFromJson = timeServiceJsonReaderWriter.createTimeServiceFromJson(timeServiceJson, player, stats)
+    timeServiceFromJson = timeServiceJsonReaderWriter.createTimeServiceFromJson(
+        timeServiceJson, player, stats
+    )
     assert timeServiceFromJson != None

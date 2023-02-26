@@ -28,9 +28,19 @@ def test_initialization():
 
     # check
     assert fishEInstance.running == True
-    assert fishE.Player.call_count == 1 or fishEInstance.playerJsonReaderWriter.readPlayerFromFile.call_count == 1
-    assert fishE.TimeService.call_count == 1 or fishEInstance.timeServiceJsonReaderWriter.readTimeServiceFromFile.call_count == 1
-    assert fishE.Stats.call_count == 1 or fishEInstance.statsJsonReaderWriter.readStatsFromFile.call_count == 1
+    assert (
+        fishE.Player.call_count == 1
+        or fishEInstance.playerJsonReaderWriter.readPlayerFromFile.call_count == 1
+    )
+    assert (
+        fishE.TimeService.call_count == 1
+        or fishEInstance.timeServiceJsonReaderWriter.readTimeServiceFromFile.call_count
+        == 1
+    )
+    assert (
+        fishE.Stats.call_count == 1
+        or fishEInstance.statsJsonReaderWriter.readStatsFromFile.call_count == 1
+    )
     fishE.Prompt.assert_called_once()
     fishE.UserInterface.assert_called_once()
     fishE.bank.Bank.assert_called_once()

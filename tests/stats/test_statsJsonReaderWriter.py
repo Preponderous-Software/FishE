@@ -3,20 +3,25 @@ from src.stats import statsJsonReaderWriter
 import json
 from jsonschema import validate
 
+
 def createStatsJsonReaderWriter():
     return statsJsonReaderWriter.StatsJsonReaderWriter()
+
 
 def createStats():
     return Stats()
 
+
 def getStatsSchema():
     # load json from file
-    with open('schemas/stats.json') as json_file:
+    with open("schemas/stats.json") as json_file:
         return json.load(json_file)
+
 
 def test_initialization():
     statsJsonReaderWriter = createStatsJsonReaderWriter()
     assert statsJsonReaderWriter != None
+
 
 def test_createJsonFromStats():
     statsJsonReaderWriter = createStatsJsonReaderWriter()
@@ -27,6 +32,7 @@ def test_createJsonFromStats():
     # validate
     statsSchema = getStatsSchema()
     validate(statsJson, statsSchema)
+
 
 def test_createStatsFromJson():
     statsJsonReaderWriter = createStatsJsonReaderWriter()

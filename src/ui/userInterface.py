@@ -49,9 +49,7 @@ class UserInterface:
         print("\n")
 
     def showOptions(
-        self,
-        descriptor,
-        optionList,
+        self, descriptor, optionList,
     ):
         while True:
             self.lotsOfSpace()

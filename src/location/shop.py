@@ -24,7 +24,11 @@ class Shop:
         self.timeService = timeService
 
     def run(self):
-        li = ["Sell Fish", "Buy Better Bait ( $%d )" % self.player.priceForBait, "Go to Docks"]
+        li = [
+            "Sell Fish",
+            "Buy Better Bait ( $%d )" % self.player.priceForBait,
+            "Go to Docks",
+        ]
         input = self.userInterface.showOptions(
             "The shopkeeper winks at you as you behold his collection of fishing poles.",
             li,

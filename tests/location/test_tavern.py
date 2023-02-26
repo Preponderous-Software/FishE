@@ -104,25 +104,3 @@ def test_getDrunk():
     assert tavern.print.call_count == 3
     assert tavern.sys.stdout.flush.call_count == 3
     tavernInstance.timeService.increaseDay.assert_called_once()
-
-
-# def test_gamble_throw_dice_win():
-#     # prepare
-#     tavernInstance = createTavern()
-#     tavernInstance.player.money = 10
-#     tavernInstance.currentBet = 10
-#     tavernInstance.userInterface.showOptions = MagicMock(return_value="1")
-#     tavern.random.randint = MagicMock(return_value=1)
-
-#     # call
-#     tavernInstance.gamble()
-    
-#     # check
-#     assert tavernInstance.player.money == 20
-#     assert tavernInstance.stats.totalMoneyMade == 10
-#     assert tavernInstance.currentBet == 0
-    
-
-# def test_changeBet():
-#     # TODO: implement
-#     assert(False)
