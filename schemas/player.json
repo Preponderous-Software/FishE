@@ -16,12 +16,17 @@
         "fishMultiplier": {
             "type": "number",
             "minimum": 0
+        },
+        "priceForBait": {
+            "type": "number",
+            "minimum": 0
         }
     },
     "required": [
         "fishCount",
         "money",
         "moneyInBank",
-        "fishMultiplier"
+        "fishMultiplier",
+        "priceForBait"
     ]
 }

@@ -23,10 +23,8 @@ class Shop:
         self.stats = stats
         self.timeService = timeService
 
-        self.priceForBait = 50
-
     def run(self):
-        li = ["Sell Fish", "Buy Better Bait ( $%d )" % self.priceForBait, "Go to Docks"]
+        li = ["Sell Fish", "Buy Better Bait ( $%d )" % self.player.priceForBait, "Go to Docks"]
         input = self.userInterface.showOptions(
             "The shopkeeper winks at you as you behold his collection of fishing poles.",
             li,
@@ -51,11 +49,11 @@ class Shop:
         self.currentPrompt.text = "You sold all of your fish!"
 
     def buyBetterBait(self):
-        if self.player.money < self.priceForBait:
+        if self.player.money < self.player.priceForBait:
             self.currentPrompt.text = "You don't have enough money!"
         else:
             self.player.fishMultiplier += 1
-            self.player.money -= self.priceForBait
+            self.player.money -= self.player.priceForBait
 
-            self.priceForBait = self.priceForBait * 1.25
+            self.player.priceForBait = self.player.priceForBait * 1.25
             self.currentPrompt.text = "You bought some better bait!"

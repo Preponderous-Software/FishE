@@ -32,7 +32,8 @@ def test_createPlayerFromJson():
         "fishCount": 0,
         "fishMultiplier": 1,
         "money": 0,
-        "moneyInBank": 0
+        "moneyInBank": 0,
+        "priceForBait": 50
     }
     
     playerJsonReaderWriter = createPlayerJsonReaderWriter()

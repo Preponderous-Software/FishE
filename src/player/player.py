@@ -5,3 +5,4 @@ class Player:
         self.money = 20
         self.moneyInBank = 0.01
         self.fishMultiplier = 1
+        self.priceForBait = 50
