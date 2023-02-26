@@ -1,0 +1,29 @@
+{
+    "type": "object",
+    "properties": {
+        "totalFishCaught": {
+            "type": "integer",
+            "description": "The total number of fish caught by the player."
+        },
+        "totalMoneyMade": {
+            "type": "number",
+            "description": "The total amount of money made by the player."
+        },
+        "hoursSpentFishing": {
+            "type": "integer",
+            "description": "The total number of hours spent fishing by the player."
+        },
+        "moneyMadeFromInterest": {
+            "type": "number",
+            "description": "The total amount of money made from interest by the player."
+        },
+        "timesGottenDrunk": {
+            "type": "integer",
+            "description": "The total number of times the player has gotten drunk."
+        },
+        "moneyLostFromGambling": {
+            "type": "number",
+            "description": "The total amount of money lost from gambling by the player."
+        }
+    }
+}
