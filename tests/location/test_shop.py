@@ -95,4 +95,4 @@ def test_buyBetterBait():
     # check
     assert shopInstance.player.money == 50
     assert shopInstance.player.fishMultiplier == 2
-    assert shopInstance.priceForBait > 0
+    assert shopInstance.player.priceForBait > 0
