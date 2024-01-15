@@ -41,14 +41,14 @@ printVersion() {
 runTests() {
     # run tests
     echo "Running tests"
-    python -m pytest
+    python3 -m pytest
     echo ""
 }
 
 startProgram() {
     # start program
     echo "Starting program"
-    python src/fishE.py
+    python3 src/fishE.py
 }
 
 # main
